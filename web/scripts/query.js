@@ -24,7 +24,7 @@ $(document).ready(function() {
 
 function getQueryCallback(outputIndex) {
 	return function(data) {
-		$('#output').append(fillRow(outputIndex, data));
+		fillRow(outputIndex, data);
 	};
 }
 
@@ -41,9 +41,18 @@ function makeInitialRow(outputIndex, symbol) {
 }
 
 function fillRow(index, data) {
-	console.log(index);
 	$('#output-' + index + ' > .name-cell').html(data['name']);
 	$('#output-' + index + ' > .score-cell').html(data['score']);
+
+	// Issues symbols
+	issues = data['issues']
+	issuesHTML = ""
+	for (i in issues) {
+		issue = issues[i]
+		issuesHTML += issue
+	}
+	$('#output-' + index + ' > .score-cell').append(issuesHTML);
+
 }
 
 function makeRow(data) {
