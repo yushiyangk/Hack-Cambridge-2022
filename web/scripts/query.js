@@ -30,7 +30,6 @@ function getQueryCallback(stockSymbol, outputIndex) {
 		fillRow(outputIndex, data);
 		let name = $('#output-' + outputIndex + ' > .name-cell').html();
 		let score = $('#output-' + outputIndex + ' > .score-cell').html();
-		console.log(score);
 		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, name));
 	};
 }
@@ -89,8 +88,6 @@ function makeRow(data) {
 // Loading dots: https://tenor.com/view/ellipse-dots-cycle-gif-13427673
 
 function recommend(stocks) {
-	console.log(stocks);
-	console.log(alternatives);
 	// Assume stocks is sorted in order of priority
 	let recommendations = {};
 	let recommended = new Set();
@@ -122,7 +119,6 @@ function recommend(stocks) {
 		}
 	});
 	console.log(recommendations);
-	console.log(recommended);
 
 	// Update
 	stocks.forEach((stock, i) => {
