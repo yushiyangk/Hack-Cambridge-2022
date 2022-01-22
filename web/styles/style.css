@@ -1,0 +1,10 @@
+#main-form {
+	margin-left: auto;
+	margin-right: auto;
+}
+#stock-symbol-entry {
+	width: 80%;
+}
+#add-button {
+	width: 15%;
+}

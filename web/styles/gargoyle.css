@@ -1,0 +1,736 @@
+/* Gargoyle.css */
+
+
+
+/*
+	Contents
+	- Section elements
+	- Text elements
+	- List elements
+	- Figure elements
+	- Table elements
+	- Inline elements
+	- Inline lists
+	- Inline classes
+	- Action buttons
+	- Unhide content after CSS is loaded
+*/
+
+
+
+/*
+	Legacy support
+	Only browsers with >0.1% market share are noted
+
+	Optional features (unsupported browsers):
+		text-rendering (IE –11, Edge –18, Firefox –76 on Mac, Chrome –83 on Mac, Android –4.3, Samsung –11.1)
+			! Android –4.3 breaks rendering of custom fonts with text-rendering: optimizeLegibility
+		overflow-wrap (IE –11, Edge –17, O Mini, Android –4.3, KaiOS 2.5) fallback on deprecated alias word-wrap
+		hyphens (IE –9, Chrome –54, Chrome 55–83 partial, Opera 42–66 partial, O Mini all, Android –4.4.4, Android Chrome 80 partial, UC 12.12 partial, Samsung 4, QQ 1.2) -moz- for Firefox 6–42, -ms- for IE 10–11, Edge 12–18, -webkit- for Safari 5.1–13.1 & iOS 4.2–13.4,
+		hyphens for English (IE –9, Chrome –54, Android –4.4.4, Samsung –4)
+		tab-size (IE –11, Edge –18, Android –4.3), -moz- for Firefox 4–76 & Firefox Android 68 & KaiOS 2.5, -o- for Opera 11.5–12.1 & O Mini & O Mobile 12–12.1
+		width: max-content (IE –11, Edge –18, Android –4.4.4, Samsung –4) -moz- for Firefox 3–65, -webkit- for Chrome 22–45, intrinsic value for Safari 3.1–10.1 & iOS 3.2–10.3
+		:visited (Android –4.3)
+		border-radius (IE –8, O Mini) -moz- for Firefox 2–3.6, -webkit- for Chrome 4 & Safari 3.1–4 & iOS 3.2 & Android 2.1
+		font-feature-settings (IE –9, O Mini, Android –4.3) -moz- old syntax for Firefox 4–14, -moz- for Firefox 15–33, -webkit- for Chrome 16–47 & Opera 15–34 & Android 4.4–4.4.4 & Samsung 4
+		flex (IE –10) -webkit- for Chrome 22–28 & Safari 8 & iOS 8–8.4
+
+	Features with fallback mechanisms (unsupported browsers):
+		initial value (IE –11, O Mini all) -moz- for Firefox 2–3
+		vw units (IE –8, O Mini, Android –4.3)
+		calc() (IE –11, Safari 5.1, O Mini, Android –4.3) -moz- for Firefox 4–15, -webkit- for Chrome 19–25 & Safari 6 & iOS 6.1
+			! IE 9 crashes when used in the background-position property
+			! Various known issues: https://caniuse.com/#feat=calc
+		text-align: start or end (IE –11, Edge –18, Android –4.4.4)
+		::first-letter (IE –8) ffbug workaround for Firefox using -moz-animation & @-moz-keyframes
+
+	Dependent features for action buttons, which will fallback to plain hyperlinks (unsupported browsers):
+		background-image multiple (IE –8)
+		background-image SVG (IE –8, Safari –13.1, iOS –13.4)
+		linear-gradient() (IE –9)
+		linear-gradient(to) (IE –9)
+		background-size (IE –8)
+		background-repeat (Android IE –4.4.4)
+		background-position edge offset (IE –8, Android –4.3)
+
+	Features with no implemented fallback mechanisms (and browsers with no support):
+		@supports (IE –11, Android –4.3)
+		margin: auto (Android –4.4.4)
+		rem units (IE –8, IE 9–10 partial)
+			! IE 9–10 ignores entire declaration when used in pseudo-elements or in the font shorthand property
+		vh units (IE –8, O Mini, Android –4.3)
+		:hover (Android –4.4.4)
+*/
+
+
+
+/*
+	Section elements
+*/
+html {
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+
+	margin: 0;
+	padding: 0;
+
+	color: darkslategray;
+
+	/* Nominally an SVG property but good for Chrome; breaks Android 4.3 */
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	display: block;
+
+	margin: 0;
+	padding: 0;
+	padding-bottom: 3rem;
+
+	background-color: snow;
+	color: darkslategray;
+
+	/* Workaround for IE bug with margin: auto column centring; parent container needs this. */
+	text-align: center;
+}
+
+main {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+
+	width: 40rem;  /* $column-width */
+	max-width: 90%;
+	max-width: calc(100% - 2rem);
+	max-width: 91.666667vw;  /* 100vw - 2 * $main-margin */
+}
+
+nav {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+}
+
+article {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+
+	/* CSS3 Text */
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+
+	word-wrap: break-word;  /* alias of overflow-wrap */
+	overflow-wrap: break-word;
+
+	text-indent: 0;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+}
+
+header {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+}
+
+footer {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+}
+
+section {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+}
+
+aside {
+	display: block;
+
+	margin: 1.5rem auto;
+	padding: 0;
+
+	text-align: left;
+	text-align: start;
+	text-align: -moz-initial;
+	text-align: initial;
+}
+
+
+
+/*
+	Text elements
+*/
+p {
+	display: block;
+
+	margin-top: 0.75rem;
+	margin-bottom: 1.5rem;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+}
+
+h1 {
+	display: block;
+
+	font-size: 2rem;
+	line-height: 2.25rem;
+
+	margin-top: 2.25rem;
+	margin-bottom: 1.5rem;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+
+	/* CSS3 Text */
+	-moz-hyphens: none;
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+h2, h3, h4, h5, h6 {
+	display: block;
+
+	margin-top: 2.25rem;
+	margin-bottom: 0.75rem;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+}
+hgroup > h1, hgroup > h2, hgroup > h3, hgroup > h4, hgroup > h5, hgroup > h6 {
+	margin-top: 0;
+}
+hgroup {
+	display: block;
+
+	margin-top: 2.25rem;
+	margin-bottom: 0.75rem;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+}
+h2 {
+	font-size: 1.666667rem;
+	font-weight: bold;
+}
+h3 {
+	font-size: 1.333333rem;
+	font-weight: bold;
+}
+h4 {
+	font-size: 1.111111rem;
+	font-weight: bold;
+}
+h5 {
+	font-size: 1rem;
+	margin-left: 1rem;
+
+	font-weight: bold;
+}
+h6 {
+	font-size: 1rem;
+	margin-left: 2rem;
+
+	font-weight: bold;
+	font-style: italic;
+}
+
+hr {
+	display: block;
+
+	margin: 2.25rem 0;
+	margin-bottom: calc(2.25rem - 1px);
+	padding: 0;
+
+	border: 0;
+	border-bottom: 1px solid darkslategrey;
+}
+
+
+
+/*
+	List elements
+*/
+.g-continue {
+	margin-bottom: 0;
+}
+ul, ol, dl {
+	display: block;
+
+	margin-top: 0.75rem;
+	margin-bottom: 1.5rem;
+	margin-left: 0;
+	margin-right: 0;
+	padding: 0;
+
+	list-style-position: outside;
+}
+
+li {
+	display: list-item;
+	margin: 0;
+	margin-left: 1.5rem;
+}
+
+dt {
+	display: inline;
+	margin: 0;
+}
+dt::before {
+	content: '';
+	display: block;
+}
+dd {
+	display: inline;
+	margin: 0;
+	margin-left: 1.5rem;
+}
+dd::after {
+	content: '';
+	display: block;
+}
+
+
+
+/*
+	Figure elements
+*/
+figure {
+	display: block;
+
+	margin-top: 0.75rem;
+	margin-bottom: 2.25rem;
+
+	/* Expand outside the column to be bounded by page instead */
+	/* If calc or vw not supported, simply fall back to being bounded by column */
+	/* 50vw - $main-margin */
+	margin-left: calc(50% - 45.833333vw);
+	margin-right: calc(50% - 45.833333vw);
+}
+
+figcaption {
+	display: block;
+
+	/* Effectively centre for single line, left-align for multiple lines */
+	width: -moz-max-content;
+	width: -webkit-max-content;
+	width: intrinsic;
+	width: max-content;
+	max-width: 40em;  /* $column-width */
+
+	margin: 0.75rem auto;  /* figcaption may be above or below */
+
+	text-align: left;
+}
+
+figure > img, figure > picture, figure > table {
+	display: block;
+	margin: 0.75rem auto;
+
+	/* max-width matches main */
+	max-width: 90%;
+	max-width: calc(100% - 2rem);
+	max-width: 91.666667vw;  /* 100vw - 2 * $main-margin */
+}
+
+figure.g-bounded {
+	margin-left: 0;
+	margin-right: 0;
+}
+figure.g-bounded > img, figure.g-bounded > picture, figure.g-bounded > table {
+	max-width: 100%;
+}
+
+img {
+	display: block;
+	margin: 0 auto;
+
+	max-height: 80vh;
+}
+picture {
+	display: block;
+
+	margin-top: 0.75rem;
+	margin-bottom: 2.25rem;
+	margin-left: auto;
+	margin-right: auto;
+
+	max-height: 80vh;
+}
+
+
+
+/*
+	Table elements
+	Defect: gridding of td, th padding and border 1px
+*/
+table {
+	display: table;
+
+	width: -moz-max-content;
+	width: -webkit-max-content;
+	width: intrinsic;
+	width: max-content;
+
+	margin-top: 0.75rem;
+	margin-bottom: 2.25rem;
+	margin-left: auto;
+	margin-right: auto;
+
+	border-top: 1px solid lightgrey;
+	border-collapse: collapse;
+
+	hyphens: auto;
+
+	overflow-x: auto;
+}
+td, th {
+	display: table-cell;
+
+	padding: 0.1875rem 0.5em;
+}
+th, thead td {
+	text-align: center;
+	border-bottom: 1px solid lightgrey;
+}
+td.g-left, th.g-left {
+	text-align: left;
+}
+td.g-right, th.g-right {
+	text-align: right;
+}
+td.g-centre, th.g-centre {
+	text-align: center;
+}
+thead {
+	display: table-header-group;
+
+	border-bottom: 1px solid lightgrey;
+}
+tbody {
+	display: table-row-group;
+
+	border-bottom: 1px solid lightgrey;
+}
+tfoot {
+	display: table-footer-group;
+
+	border-bottom: 1px solid lightgrey;
+}
+
+
+
+/*
+	Inline elements
+*/
+a {
+	display: inline;
+
+	color: maroon;
+	text-decoration: underline;
+}
+a:hover {
+	text-decoration: none;
+}
+a:visited {
+	color: #600000;
+}
+
+small {
+	font-size: 0.833333rem;
+	line-height: 1.125rem;
+}
+
+code {
+	display: inline;
+
+	font-family: monospace;
+	line-height: 1.3rem;  /* border-radius increases line height */
+	line-height: calc(1.5rem - 0.2em);
+
+	-moz-border-radius: 0.2em;
+	-webkit-border-radius: 0.2em;
+	border-radius: 0.2em;
+
+	background-color: aliceblue;
+}
+
+/* Workaround for Firefox adding extra space after an element that has display: inline-block and a ::first-letter with a change of font-size; fixed by forcing reflow */
+@-moz-keyframes ffbug { from { padding-right: 0.1px ; } to { padding-right: 0; } }
+abbr {
+	display: inline;
+
+	/* CSS3 Font (generic OpenType features) */
+	/* Low-level syntax for compatibility; do not use for smallcaps */
+	-moz-font-feature-settings: "c2sc=1";
+	-moz-font-feature-settings: "c2sc";
+	-webkit-font-feature-settings: "c2sc";
+	font-feature-settings: "c2sc";
+}
+abbr.g-capital {
+	display: inline-block;
+
+	margin: 0;
+	padding: 0;
+
+	-moz-animation: ffbug 1s ease 1s 1;
+}
+abbr.g-capital::first-letter {
+	/* CSS3 Font (generic OpenType features) */
+	/* Low-level syntax for compatibility; do not use for smallcaps */
+	-moz-font-feature-settings: "c2sc=0";
+	-moz-font-feature-settings: "c2sc" off;
+	-webkit-font-feature-settings: "c2sc" off;
+	font-feature-settings: "c2sc" off;
+}
+
+
+
+/*
+	Inline lists
+*/
+@supports (display: inline-flex) or (display: -ms-inline-flexbox) {
+	.g-inline, .g-subinline {
+		display: -ms-inline-flexbox;
+		display: -webkit-inline-flex;
+		display: inline-flex;
+		flex-flow: row wrap;
+
+		margin: 0;
+		padding: 0;
+	}
+
+	.g-inline > li, .g-subinline > li {
+		display: block;
+		-webkit-flex: 0 0 auto;
+		flex: 0 0 auto;
+
+		margin: 0;
+		padding: 0;
+	}
+	.g-inline > li::after, .g-subinline > li::after {
+		content: '·';
+
+		padding-left: 0.3em;  /* $separator-padding */
+		padding-right: 0.3em;  /* $separator-padding */
+		line-height: 0;
+
+		color: grey;
+	}
+	.g-inline > li:last-child::after, .g-subinline > li:last-child::after {
+		content: none;
+	}
+
+
+	.g-inline > dt, .g-subinline > dt {
+		display: block;
+		-webkit-flex: 0 0 auto;
+		flex: 0 0 auto;
+
+		margin: 0;
+		padding: 0;
+
+		font-weight: bold;
+	}
+	.g-inline > dt::after, .g-subinline > dt {
+		content: ':';
+		margin-right: 0.3em;  /* $separator-padding */
+	}
+	.g-inline > dt:last-child::after, .g-subinline > dt:last-child::after {
+		content: none;
+	}
+
+	.g-inline > dd, .g-subinline > dd {
+		display: block;
+		-webkit-flex: 0 0 auto;
+		flex: 0 0 auto;
+
+		margin: 0;
+		padding: 0;
+	}
+	.g-inline > dd::after, .g-subinline > dd::after {
+		content: '·';
+		font-size: initial;
+		font-weight: initial;
+		color: grey;
+		line-height: 0;
+
+		margin-left: 0.3em;  /* $separator-padding */
+		margin-right: 0.3em;  /* $separator-padding */
+	}
+	.g-inline > dd:last-child::after, .g-subinline > dd:last-child::after {
+		content: none;
+	}
+
+	.g-subinline {
+		flex-flow: row nowrap;
+
+		font-size: 0.833333rem;
+		line-height: 1.125rem;
+	}
+	.g-subinline::before {
+		content: '(';
+	}
+
+	.g-subinline::after {
+		content: ')';
+	}
+}
+
+
+
+/*
+	Inline classes
+*/
+.g-nohyphen {
+	-moz-hyphens: none;
+	-webkit-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+
+
+/*
+	Action buttons
+*/
+a.g-button {
+	display: inline-block;
+	box-sizing: border-box;
+
+	padding-top: 0.9375rem;
+	padding-top: calc(0.9375rem - 2px);
+	padding-bottom: 0.9375rem;
+	padding-bottom: calc(0.9375rem - 2px);
+	padding-left: 2rem;
+	padding-right: 2rem;
+
+	line-height: 1.125rem;
+	max-width: 100%;
+
+	border: 2px solid;
+	border-radius: 6px;
+
+	overflow: hidden;
+
+	text-decoration: none;
+
+	transition: all 100ms ease;
+}
+a.g-button:hover {
+	background-color: #ffd4d1;
+}
+
+a.g-go {
+	color: green;
+	border-color: green;
+	background-color: #d0f0d0;
+}
+a.g-go:hover {
+	background-color: #b8f0b8;
+}
+@supports
+	(background-image: url('icons/go.svg'), linear-gradient(to right, green 1px, transparent 1px)) and
+	(background-size: 1.25rem, 1px 60%) and
+	(background-repeat: no-repeat, no-repeat)
+{
+	a.g-go {
+		padding-right: 4.5rem;
+		padding-right: calc(4.5rem + 1px);
+
+		background-image:
+			url('icons/go.svg'),
+			linear-gradient(to right, green 1px, transparent 1px);
+		background-size:
+			1.25rem,
+			1px 60%;
+		background-repeat: no-repeat;
+		background-position:
+			top 50% right 1rem,
+			top 50% right 3.25rem;
+	}
+
+	a.g-go:hover {
+		background-size:
+			1.5rem,
+			1px 60%;
+		background-position:
+			top 50% right 0.875rem,
+			top 50% right 3.25rem;
+	}
+	/* Detect for MS Edge; disable size increase due to bad behaviour of its transition, which is less obvious in the larger transition of :focus  */
+	_:-ms-lang(x), _:-webkit-full-screen, a.g-go:hover {
+		background-size:
+			1.25rem,
+			1px 60%;
+		background-position:
+			top 50% right 1rem,
+			top 50% right 3.25rem;
+	}
+
+	a.g-go:focus {
+		background-image: url('icons/go.svg');
+		background-size: 1.5rem;
+		background-repeat: no-repeat;
+		background-position: center;
+
+		color: transparent;
+
+		transition: all 300ms ease;
+	}
+}
+
+
+
+/*
+	Unhide content after CSS is loaded
+	Add id="g-bodymask" to body element and apply
+		body { visibility: hidden; }
+	in internal stylesheet of HTML file, to be overwritten by the following
+*/
+#g-bodymask {
+	visibility: visible;
+}

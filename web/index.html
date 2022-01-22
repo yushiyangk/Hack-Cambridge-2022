@@ -8,13 +8,19 @@
 		<title>Hi</title>
 		<script type="text/javascript" src="scripts/jquery.min.jsm"></script>
 		<script type="text/javascript" src="scripts/query.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles/gargoyle.css" />
+		<link rel="stylesheet" type="text/css" href="styles/style.css" />
 	</head>
 	<body>
-		<form id="single-form">
-			<input type="text" id="single-stock-symbol" />
-			<input type="submit" value="Find" />
-		</form>
 		<main>
+			<form id="main-form">
+				<input id="stock-symbol-entry" type="text" />
+				<input id="add-button" type="submit" value="Add" />
+			</form>
+
+			<table id="output">
+
+			</table>
 			<div id="output"></div>
 		</main>
 	</body>
