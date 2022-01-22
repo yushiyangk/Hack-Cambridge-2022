@@ -17,7 +17,7 @@ $(document).ready(function() {
 		stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
 		$('#stock-symbol-entry').val('');
 		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
-		assignDeleteButton(outputIndex);
+		assignHandlers(outputIndex);
 		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
 		outputIndex++;
@@ -43,9 +43,15 @@ function updateSuggestions(symbol) {
 	}
 }
 
-function getDeleteFunction(index) {
+function getDeleteHandler(index) {
 	return function() {
 		$('#output-' + index).remove()
+	}
+}
+
+function getUpdateHandler(index) {
+	return function() {
+		recommend(stocks)
 	}
 }
 
@@ -65,8 +71,8 @@ function makeInitialRow(outputIndex, symbol) {
 		+ '</tr>';
 }
 
-function assignDeleteButton(index) {
-	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteFunction(index))
+function assignHandlers(index) {
+	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteHandler(index))
 }
 
 function fillRow(index, data) {
