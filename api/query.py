@@ -66,3 +66,22 @@ def get_csrhub_issues(name):
             company_issues.append({'issue': img['alt'], 'img': img['src']})
 
     return company_issues
+
+# susInd is default False (which means low sustainability)
+susInd = False
+
+# susData and profData are dictionaries of top 5 companies with ESG and P/E values
+def calculateAggScore(susData, profData, susInd):
+    if susInd==True:
+        alpha = 0.8
+        beta = 0.2
+    else:
+        alpha = 0.6
+        beta = 0.4
+
+    # might need to be -profData[i] if using P/E
+    scores = {k: alpha*susData.get(k, 0) + beta*profData.get(k, 0) for k in set(susData)}
+    company = max(scores, key=scores.get)
+
+    # returns the company with the best aggregate score
+    return company
