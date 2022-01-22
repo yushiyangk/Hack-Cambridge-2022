@@ -101,21 +101,21 @@ function recommend(stocks) {
 		} else {
 			// Need to loop through alternatives
 			for (let alternative of alternatives[stock]) {
-				alternative = alternative['symbol'];
-				if (stocks.includes(alternative)) {
+				let symbol = alternative['symbol'];
+				if (stocks.includes(symbol)) {
 					// The alternative is already in our portfolio
-					recommended.add(alternative);
+					recommended.add(symbol);
 					// Swap recommendations if the stock already recommended something else earlier
-					if (recommendations[alternative] !== undefined && recommendations[alternative] !== alternative) {
-						recommendations[stock] = recommendations[alternative];
-						recommendations[alternative] = alternative;
+					if (recommendations[symbol] !== undefined && recommendations[symbol] !== symbol) {
+						recommendations[stock] = recommendations[symbol];
+						recommendations[symbol] = alternative;
 						break;
 					}
 					// Otherwise, continue the for loop
-				} else if (!recommended.has(alternative)) {
+				} else if (!recommended.has(symbol)) {
 					// Update
 					recommendations[stock] = alternative;
-					recommended.add(alternative);
+					recommended.add(symbol);
 					break;
 				}
 			}
@@ -125,6 +125,8 @@ function recommend(stocks) {
 
 	// Update
 	stocks.forEach((stock, i) => {
-		$('#output-' + i + ' > .suggestion-symbol-cell').html(recommendations[stock]);
+		$('#output-' + i + ' > .suggestion-symbol-cell').html(recommendations[stock]['symbol']);
+		$('#output-' + i + ' > .suggestion-name-cell').html(recommendations[stock]['name']);
+		$('#output-' + i + ' > .suggestion-score-cell').html(recommendations[stock]['score']);
 	});
 }
