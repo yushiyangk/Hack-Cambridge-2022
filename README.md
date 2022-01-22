@@ -4,14 +4,14 @@
 
 In `api/`, run
 ```
-export FLASK_APP=csv_data
+export FLASK_APP=api
 export FLASK_ENV=
 flask run
 ```
 
 For testing, run
 ```
-export FLASK_APP=csv_data
+export FLASK_APP=api
 export FLASK_ENV=development
 flask run
 ```
