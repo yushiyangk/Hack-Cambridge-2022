@@ -27,7 +27,11 @@ def get_csrhub_score(name):
     # Join using hyphen as this is what is accepted for CSRHub
     name = "-".join(words[:index])
     result = subprocess.run(['bash', 'csrhub.sh', name], stdout=subprocess.PIPE)
-    return int(result.stdout.decode())
+    try:
+        return int(result.stdout.decode())
+    except ValueError:
+        # Sometimes we get "NA" for the score
+        return -1
 
 
 if __name__ == '__main__':
