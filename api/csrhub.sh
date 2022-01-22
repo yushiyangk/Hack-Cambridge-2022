@@ -13,4 +13,4 @@ for company in "$@" ; do
   else
     echo "$score"
   fi
-done < companies.txt
+done

@@ -6,4 +6,5 @@ fi
 
 curl -s https://www.marketwatch.com/investing/stock/"$1" | \
   grep mw_quote_competitors | \
-  sed -e 's/.*competitors\">\(.*\)<\/a>.*/\1/'
+  sed -e 's/.*stock\/\(.*\)?.*competitors\">\(.*\)<\/a>.*/\1 : \2/'
+  # symbol : company
