@@ -63,6 +63,6 @@ def get_csrhub_issues(name):
     if li:
         for thing in li:
             img = thing.find('img')
-            company_issues.append(img['alt'])
+            company_issues.append({'issue': img['alt'], 'img': img['src']})
 
     return company_issues

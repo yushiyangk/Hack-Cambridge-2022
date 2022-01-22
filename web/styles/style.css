@@ -16,3 +16,21 @@ input.value-field {
 img.loading {
 	height: 1ex;
 }
+
+img.issue-icon {
+	max-height: 1.6ex;
+	max-width: 1.6ex;
+	display: inline;
+}
+
+.score-cell {
+	text-align: center;
+}
+
+.delete-button {
+	visibility: hidden;
+	cursor: pointer;
+}
+tr:hover .delete-button {
+	visibility: visible;
+}
