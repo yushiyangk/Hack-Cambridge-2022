@@ -7,19 +7,7 @@
 		<meta name="description" content="Hack Cambridge 2022" />
 		<title>Hi</title>
 		<script type="text/javascript" src="scripts/jquery.min.jsm"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				ROOT = "http://127.0.0.1:5000/"
-
-				console.log('wtf');
-				$('#single-form').on('submit', function(e) {
-					e.preventDefault();
-					$.getJSON(ROOT + 'api/stock/' + $('#single-stock-symbol').val().trim().toUpperCase(), function(data) {
-						$('#output').html(data['name'] + ': ' + data['score']);
-					})
-				});
-			});
-		</script>
+		<script type="text/javascript" src="scripts/query.js"></script>
 	</head>
 	<body>
 		<form id="single-form">
