@@ -26,3 +26,11 @@ img.issue-icon {
 .score-cell {
 	text-align: center;
 }
+
+.delete-button {
+	visibility: hidden;
+	cursor: pointer;
+}
+tr:hover .delete-button {
+	visibility: visible;
+}

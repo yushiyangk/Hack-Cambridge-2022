@@ -15,8 +15,9 @@ $(document).ready(function() {
 		// Query stock symbol and display score
 		stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
 		$('#stock-symbol-entry').val('');
-		$('#output').append(makeInitialRow(outputIndex, stockSymbol))
-		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(outputIndex))
+		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
+		assignDeleteButton(outputIndex);
+		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(outputIndex));
 
 		outputIndex++;
 	});
@@ -29,6 +30,12 @@ function getQueryCallback(outputIndex) {
 	};
 }
 
+function getDeleteFunction(index) {
+	return function() {
+		$('#output-' + index).remove()
+	}
+}
+
 
 function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
@@ -38,7 +45,12 @@ function makeInitialRow(outputIndex, symbol) {
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="alternative-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
+		+ '<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>'
 		+ '</tr>';
+}
+
+function assignDeleteButton(index) {
+	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteFunction(index))
 }
 
 function fillRow(index, data) {
