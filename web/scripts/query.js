@@ -14,7 +14,7 @@ $(document).ready(function() {
 		event.preventDefault();
 
 		// Query stock symbol and display score
-		stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
+		let stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
 		$('#stock-symbol-entry').val('');
 		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
 		assignDeleteButton(outputIndex);
@@ -28,18 +28,17 @@ $(document).ready(function() {
 function getQueryCallback(stockSymbol, outputIndex) {
 	return function(data) {
 		fillRow(outputIndex, data);
-		let name = $('#output-' + outputIndex + ' > .name-cell').html();
 		let score = $('#output-' + outputIndex + ' > .score-cell').html();
-		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, name));
+		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, outputIndex));
 	};
 }
 
 
-function updateSuggestions(symbol) {
+function updateSuggestions(stockSymbol, outputIndex) {
 	return function(data) {
-		alternatives[symbol] = data;
-		stocks.push(stockSymbol);
-		recommend(stocks);
+		alternatives[stockSymbol] = data;
+		stocks.push([outputIndex, stockSymbol]);
+		recommend();
 	}
 }
 
@@ -66,7 +65,10 @@ function makeInitialRow(outputIndex, symbol) {
 }
 
 function assignDeleteButton(index) {
-	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteFunction(index))
+	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteFunction(index));
+	// Remove from global stocks variable
+	let idx = stocks.findIndex(stock => stock[0] === index);
+	stocks.splice(idx, 1);
 }
 
 function fillRow(index, data) {
@@ -90,12 +92,29 @@ function makeRow(data) {
 
 // Loading dots: https://tenor.com/view/ellipse-dots-cycle-gif-13427673
 
-function recommend(stocks) {
+function recommend() {
+	// First sort stocks by their value
+	let stocksSorted = stocks.slice();
+	stocksSorted.forEach((stock, i) => {
+		stock.push($('output-' + stock[0] + ' > .value-cell > .value-field').val());
+	});
+	stocksSorted.sort((a, b) => {
+		return a[2] - b[2];
+	});
+	console.log(stocksSorted);
+
 	// Assume stocks is sorted in order of priority
 	let recommendations = {};
 	let recommended = new Set();
-	stocks.forEach((stock, i) => {
-		recommendations[stock] = stock; // default to recommending itself
+	stocksSorted.forEach((stock, i) => {
+		// Default to recommending itself
+		recommendations[stock[1]] = {
+			'symbol': stock[1],
+			'name': $('#output-' + stock[0] + ' > .name-cell').html(),
+			'score': $('#output-' + stock[0] + ' > .score-cell').html()
+		};
+		stock = stock[1]; // keep just the symbol now
+
 		if (recommended.has(stock)) {
 			// Stock previously recommended already. The default is correct so we do nothing
 		} else {
@@ -124,9 +143,9 @@ function recommend(stocks) {
 	console.log(recommendations);
 
 	// Update
-	stocks.forEach((stock, i) => {
-		$('#output-' + i + ' > .suggestion-symbol-cell').html(recommendations[stock]['symbol']);
-		$('#output-' + i + ' > .suggestion-name-cell').html(recommendations[stock]['name']);
-		$('#output-' + i + ' > .suggestion-score-cell').html(recommendations[stock]['score']);
+	stocksSorted.forEach((stock, i) => {
+		$('#output-' + stock[0] + ' > .suggestion-symbol-cell').html(recommendations[stock[1]]['symbol']);
+		$('#output-' + stock[0] + ' > .suggestion-name-cell').html(recommendations[stock[1]]['name']);
+		$('#output-' + stock[0] + ' > .suggestion-score-cell').html(recommendations[stock[1]]['score']);
 	});
 }
