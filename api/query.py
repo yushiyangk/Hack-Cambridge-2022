@@ -3,7 +3,7 @@ import subprocess
 
 def symbol_to_name(symbol):
     result = subprocess.run(['bash', 'name.sh', symbol], stdout=subprocess.PIPE)
-    return result.stdout.decode()
+    return result.stdout.decode().strip()
 
 
 def get_similar_stocks(symbol):
@@ -18,7 +18,7 @@ def get_similar_stocks(symbol):
 def get_csrhub_score(symbol):
     # Discard string once we have a word that has a period in it
     # E.g. Alphabet Inc. Cl A becomes Alphabet
-    name = symbol_to_name(symbol).strip()
+    name = symbol_to_name(symbol)
     words = name.split()
     index = len(words)
     for i, word in enumerate(words):
