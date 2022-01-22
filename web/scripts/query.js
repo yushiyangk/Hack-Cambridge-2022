@@ -31,8 +31,8 @@ function getQueryCallback(outputIndex) {
 
 function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
-		+ '<td class="name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class"symbol-cell">' + symbol + '</td>'
+		+ '<td class="name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="value-cell"><input class="value-field" type="number" value="0" /></td>'
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
@@ -45,13 +45,13 @@ function fillRow(index, data) {
 	$('#output-' + index + ' > .score-cell').html(data['score']);
 
 	// Issues symbols
-	issues = data['issues']
+	issuesData = data['issues']
 	issuesHTML = ""
-	for (i in issues) {
-		issue = issues[i]
-		issuesHTML += issue
+	for (i in issuesData) {
+		issueData = issuesData[i]
+		issuesHTML += '<img class="issue-icon" src="' + issueData['img'] + '" title="' + issueData['issue'] + '" />'
 	}
-	$('#output-' + index + ' > .score-cell').append(issuesHTML);
+	$('#output-' + index + ' > .issues-cell').html(issuesHTML);
 
 }
 
