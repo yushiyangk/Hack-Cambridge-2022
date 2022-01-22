@@ -15,10 +15,9 @@ def get_similar_stocks(symbol):
     return list(map(str.upper, result.stdout.decode().split("\n")[:-1]))
 
 
-def get_csrhub_score(symbol):
+def get_csrhub_score(name):
     # Discard string once we have a word that has a period in it
     # E.g. Alphabet Inc. Cl A becomes Alphabet
-    name = symbol_to_name(symbol)
     words = name.split()
     index = len(words)
     for i, word in enumerate(words):
