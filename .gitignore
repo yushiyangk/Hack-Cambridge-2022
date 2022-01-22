@@ -1,0 +1,5 @@
+#venv
+/api/Lib
+/api/Scripts
+/api/Include
+/api/pyvenv.cfg
