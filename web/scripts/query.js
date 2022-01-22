@@ -57,8 +57,11 @@ function makeInitialRow(outputIndex, symbol) {
 		+ '<td class="value-cell"><input class="value-field" type="number" value="0" /></td>'
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
-		+ '<td class="alternative-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>'
+		+ '<td class="spacer"></td>'
+		+ '<td class="suggestion-symbol-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
+		+ '<td class="suggestion-name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
+		+ '<td class="suggestion-score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '</tr>';
 }
 
@@ -122,6 +125,6 @@ function recommend(stocks) {
 
 	// Update
 	stocks.forEach((stock, i) => {
-		$('#output-' + i + ' > .alternative-cell').html(recommendations[stock]);
+		$('#output-' + i + ' > .suggestion-symbol-cell').html(recommendations[stock]);
 	});
 }
