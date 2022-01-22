@@ -1,4 +1,6 @@
 import subprocess
+import requests
+from bs4 import BeautifulSoup
 
 
 def symbol_to_name(symbol):
@@ -32,6 +34,28 @@ def get_csrhub_score(name):
     result = subprocess.run(['bash', 'csrhub.sh', csrname], stdout=subprocess.PIPE)
     return int(result.stdout.decode())
 
+def get_csrhub_issues(name):
+    '''
+    Get issues listed for stock
+        Input: name
+        Output: list of issues (empty if none)
+    '''
+    csrname = name_to_csrname(name)
+
+    URL = "https://www.csrhub.com/CSR_and_sustainability_information/" + csrname
+    page = requests.get(URL)
+
+    soup = BeautifulSoup(page.content, "html.parser")
+    result = soup.find('ul', {"class" : "company-section_spec-issue_list"})
+    li = result.findAll('li')
+
+    company_issues = []
+    if li:
+        for thing in li:
+            img = thing.find('img')
+            company_issues.append(img['alt'])
+    
+    return company_issues
 
 if __name__ == '__main__':
     stocks = get_similar_stocks("AAPL")
