@@ -1,8 +1,9 @@
-let alternatives = {
-}
+let alternatives = {};
+let stocks = [];
+
+const ROOT = "http://127.0.0.1:5000/";
 
 $(document).ready(function() {
-	var ROOT = "http://127.0.0.1:5000/";
 
 
 	var outputIndex = 0;
@@ -17,17 +18,29 @@ $(document).ready(function() {
 		$('#stock-symbol-entry').val('');
 		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
 		assignDeleteButton(outputIndex);
-		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(outputIndex));
+		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
 		outputIndex++;
 	});
 });
 
 
-function getQueryCallback(outputIndex) {
+function getQueryCallback(stockSymbol, outputIndex) {
 	return function(data) {
 		fillRow(outputIndex, data);
+		let name = $('#output-' + outputIndex + ' > .name-cell').html();
+		let score = $('#output-' + outputIndex + ' > .score-cell').html();
+		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, name));
 	};
+}
+
+
+function updateSuggestions(symbol) {
+	return function(data) {
+		alternatives[symbol] = data;
+		stocks.push(stockSymbol);
+		recommend(stocks);
+	}
 }
 
 function getDeleteFunction(index) {
@@ -85,6 +98,7 @@ function recommend(stocks) {
 		} else {
 			// Need to loop through alternatives
 			for (let alternative of alternatives[stock]) {
+				alternative = alternative['symbol'];
 				if (stocks.includes(alternative)) {
 					// The alternative is already in our portfolio
 					recommended.add(alternative);
@@ -103,7 +117,11 @@ function recommend(stocks) {
 				}
 			}
 		}
-	})
+	});
 	console.log(recommendations);
-	console.log(recommended);
+
+	// Update
+	stocks.forEach((stock, i) => {
+		$('#output-' + i + ' > .alternative-cell').html(recommendations[stock]);
+	});
 }
