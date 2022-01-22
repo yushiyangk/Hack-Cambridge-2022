@@ -36,6 +36,17 @@ def get_single_stock(stock_symbol: str) -> str:
 		'score': score
 	})
 
-
-def get_alternatives(stock_symbol: str):
-	...
+@app.route("/api/suggestions/<stock_symbol>+<original_score>", methods=['GET'])
+@fc.cross_origin()
+def get_suggestions(original_score: str, stock_symbol: str) -> str:
+	original_score = int(original_score)
+	similar_stocks = query.get_similar_stocks(stock_symbol)
+	print(similar_stocks)
+	suggestions = []
+	for candidate in similar_stocks:
+		candidate_name = query.symbol_to_name(candidate)
+		candidate_score = query.get_csrhub_score(candidate_name)
+		if candidate_score > original_score:
+			suggestions.append({'name': candidate_name, 'symbol': candidate, 'score': candidate_score})
+	suggestions.sort(key=lambda d: -1 * d['score'])
+	return flask.jsonify(suggestions)
