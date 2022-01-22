@@ -1,14 +1,6 @@
-## CSRHub script
-
+You may need to do
 ```shell
-chmod +x script.sh
+chmod +x *.sh
 ```
 
-Type the list of companies in `companies.txt`. Then run
-
-```shell
-./script.sh -o
-```
-
-Some stuff can be refactored later.
-
+See `script.py`. Run it for an example

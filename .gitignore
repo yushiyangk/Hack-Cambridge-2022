@@ -1,7 +1,10 @@
 __pycache__
 
-#venv
+# venv
 /api/Lib
 /api/Scripts
 /api/Include
 /api/pyvenv.cfg
+
+# IDE
+.idea/
