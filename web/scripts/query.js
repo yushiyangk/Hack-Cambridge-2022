@@ -20,8 +20,14 @@ $(document).ready(function() {
 		assignHandlers(outputIndex);
 		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
+		// Check if dummy is still visible; if it is, delete it
+		$('#output-dummy').remove();
+
 		outputIndex++;
 	});
+
+	// Assign functions for dummy output row
+	assignHandlers('dummy');
 });
 
 
