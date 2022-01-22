@@ -8,3 +8,11 @@
 #add-button {
 	width: 15%;
 }
+
+input.value-field {
+	width: 5em;
+}
+
+img.loading {
+	height: 1ex;
+}
