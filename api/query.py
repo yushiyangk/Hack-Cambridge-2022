@@ -32,7 +32,11 @@ def get_csrhub_score(name):
     # E.g. Alphabet Inc. Cl A becomes Alphabet
     csrname = name_to_csrname(name)
     result = subprocess.run(['bash', 'csrhub.sh', csrname], stdout=subprocess.PIPE)
-    return int(result.stdout.decode())
+    try:
+        return int(result.stdout.decode())
+    except ValueError:
+        # Sometimes we get "NA" for the score
+        return -1
 
 def get_csrhub_issues(name):
     '''
