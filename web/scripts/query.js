@@ -1,4 +1,5 @@
-
+let alternatives = {
+}
 
 $(document).ready(function() {
 	var ROOT = "http://127.0.0.1:5000/";
@@ -60,3 +61,37 @@ function makeRow(data) {
 }
 
 // Loading dots: https://tenor.com/view/ellipse-dots-cycle-gif-13427673
+
+function recommend(stocks) {
+	// Assume stocks is sorted in order of priority
+	let recommendations = {};
+	let recommended = new Set();
+	stocks.forEach((stock, i) => {
+		recommendations[stock] = stock; // default to recommending itself
+		if (recommended.has(stock)) {
+			// Stock previously recommended already. The default is correct so we do nothing
+		} else {
+			// Need to loop through alternatives
+			for (let alternative of alternatives[stock]) {
+				if (stocks.includes(alternative)) {
+					// The alternative is already in our portfolio
+					recommended.add(alternative);
+					// Swap recommendations if the stock already recommended something else earlier
+					if (recommendations[alternative] !== undefined && recommendations[alternative] !== alternative) {
+						recommendations[stock] = recommendations[alternative];
+						recommendations[alternative] = alternative;
+						break;
+					}
+					// Otherwise, continue the for loop
+				} else if (!recommended.has(alternative)) {
+					// Update
+					recommendations[stock] = alternative;
+					recommended.add(alternative);
+					break;
+				}
+			}
+		}
+	})
+	console.log(recommendations);
+	console.log(recommended);
+}

@@ -7,6 +7,7 @@ def symbol_to_name(symbol):
     result = subprocess.run(['bash', 'name.sh', symbol], stdout=subprocess.PIPE)
     return result.stdout.decode().strip()
 
+
 def name_to_csrname(name):
     words = name.split()
     index = len(words)
@@ -17,6 +18,7 @@ def name_to_csrname(name):
     # Join using hyphen as this is what is accepted for CSRHub
     csrname = "-".join(words[:index])
     return csrname
+
 
 def get_similar_stocks(symbol):
     result = subprocess.run(['bash', 'similar.sh', symbol], stdout=subprocess.PIPE)
@@ -38,6 +40,7 @@ def get_csrhub_score(name):
         # Sometimes we get "NA" for the score
         return -1
 
+
 def get_csrhub_issues(name):
     '''
     Get issues listed for stock
@@ -56,7 +59,6 @@ def get_csrhub_issues(name):
     else:
         li = result.findAll('li')
 
-
     company_issues = []
     if li:
         for thing in li:
@@ -64,14 +66,3 @@ def get_csrhub_issues(name):
             company_issues.append({'issue': img['alt'], 'img': img['src']})
 
     return company_issues
-
-if __name__ == '__main__':
-    stocks = get_similar_stocks("AAPL")
-    print(stocks)
-    # Example output:
-    # ['MSFT', 'GOOG', 'GOOGL', 'AMZN', 'FB', '005930', '005935', '6758', 'DELL', 'HPQ']
-    for stock in stocks:
-        name = name_to_csrname(symbol_to_name(stock))
-        print(f"{stock}: {get_csrhub_score(name)}, {get_csrhub_issues(name)}")
-    # Known bug: 'Meta-Platforms' fails for now (still thinking about how best to fix that)
-    # CSRHub requires 'Meta'
