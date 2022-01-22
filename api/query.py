@@ -31,8 +31,8 @@ def get_csrhub_scores(companies: List[str]):
         symbols.append(symbol.upper())
         names.append(name)
 
-    print(symbols)
-    print(names)
+    #print(symbols)
+    #print(names)
     result = subprocess.run(['bash', 'csrhub.sh'] + names, stdout=subprocess.PIPE)
     result = map(int, result.stdout.decode().split())
     return dict(zip(symbols, result))
