@@ -1,8 +1,9 @@
-let alternatives = {
-}
+let alternatives = {};
+let stocks = [];
+
+const ROOT = "http://127.0.0.1:5000/";
 
 $(document).ready(function() {
-	var ROOT = "http://127.0.0.1:5000/";
 
 
 	var outputIndex = 0;
@@ -16,17 +17,30 @@ $(document).ready(function() {
 		stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
 		$('#stock-symbol-entry').val('');
 		$('#output').append(makeInitialRow(outputIndex, stockSymbol))
-		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(outputIndex))
+		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
 		outputIndex++;
 	});
 });
 
 
-function getQueryCallback(outputIndex) {
+function getQueryCallback(stockSymbol, outputIndex) {
 	return function(data) {
 		fillRow(outputIndex, data);
+		let name = $('#output-' + outputIndex + ' > .name-cell').html();
+		let score = $('#output-' + outputIndex + ' > .score-cell').html();
+		console.log(score);
+		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, name));
 	};
+}
+
+
+function updateSuggestions(symbol) {
+	return function(data) {
+		alternatives[symbol] = data;
+		stocks.push(stockSymbol);
+		recommend(stocks);
+	}
 }
 
 
@@ -52,7 +66,7 @@ function fillRow(index, data) {
 		issue = issues[i]
 		issuesHTML += issue
 	}
-	$('#output-' + index + ' > .score-cell').append(issuesHTML);
+	// $('#output-' + index + ' > .score-cell').append(issuesHTML);
 
 }
 
@@ -63,6 +77,8 @@ function makeRow(data) {
 // Loading dots: https://tenor.com/view/ellipse-dots-cycle-gif-13427673
 
 function recommend(stocks) {
+	console.log(stocks);
+	console.log(alternatives);
 	// Assume stocks is sorted in order of priority
 	let recommendations = {};
 	let recommended = new Set();
@@ -73,6 +89,7 @@ function recommend(stocks) {
 		} else {
 			// Need to loop through alternatives
 			for (let alternative of alternatives[stock]) {
+				alternative = alternative['symbol'];
 				if (stocks.includes(alternative)) {
 					// The alternative is already in our portfolio
 					recommended.add(alternative);
@@ -91,7 +108,12 @@ function recommend(stocks) {
 				}
 			}
 		}
-	})
+	});
 	console.log(recommendations);
 	console.log(recommended);
+
+	// Update
+	stocks.forEach((stock, i) => {
+		$('#output-' + i + ' > .alternative-cell').html(recommendations[stock]);
+	});
 }
