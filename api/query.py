@@ -3,7 +3,7 @@ import subprocess
 
 def symbol_to_name(symbol):
     result = subprocess.run(['bash', 'name.sh', symbol], stdout=subprocess.PIPE)
-    return result.stdout.decode()
+    return result.stdout.decode().strip()
 
 
 def get_similar_stocks(symbol):
