@@ -36,21 +36,29 @@
 							<th colspan="2">ESG rating</th>
 						</tr>
 					</thead>
-					<tr>
-						<td class="symbol-cell">AAPL</td>
-						<td class="name-cell">Apple (Fake)</td>
-						<td class="value-cell">10000</td>
-						<td class="score-cell">50</td>
-						<td class="issues-cell">!</td>
+					<tr id="output-dummy">
+						<td class="symbol-cell">EXPL</td>
+						<td class="name-cell">Example Inc.</td>
+						<td class="value-cell"><input class="value-field" type="number" value="0" /></td>
+						<td class="score-cell">49</td>
+						<td class="issues-cell"></td>
 						<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>
 						<td class="spacer"></td>
-						<td class="suggestion-symbol-cell">GOOG</td>
-						<td class="suggestion-name-cell">Google</td>
-						<td class="suggestion-score-cell">51</td>
+						<td class="suggestion-symbol-cell">FOO</td>
+						<td class="suggestion-name-cell">Foobar Ltd.</td>
+						<td class="suggestion-score-cell">50</td>
 						<td class="suggestion-issues-cell">?</td>
 					</tr>
 				</table>
 			</figure>
+
+			<!--<form id="save-form">
+				<input id=
+			</form>-->
+			<form id="save-form">
+				<a href="data:application/xml;charset=utf-8,text here" download="portfolio.csv"><input type="button" value="Save portfolio" /></a>
+			</form>
+
 		</main>
 	</body>
 </html>

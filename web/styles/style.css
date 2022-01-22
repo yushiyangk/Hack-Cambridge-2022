@@ -39,3 +39,7 @@ tr:hover .delete-button {
 	width: 3em;
 	border: 0;
 }
+
+#output-dummy {
+	color: #999999;
+}

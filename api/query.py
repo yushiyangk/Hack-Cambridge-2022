@@ -66,3 +66,24 @@ def get_csrhub_issues(name):
             company_issues.append({'issue': img['alt'], 'img': img['src']})
 
     return company_issues
+
+def get_PE_ratio(symbol):
+    '''
+    Get PE ratio from Market Watch
+        Input: ticker
+        Output: PE ratio
+    '''
+
+    URL = "https://www.marketwatch.com/investing/stock/" + symbol
+    page = requests.get(URL)
+
+    soup = BeautifulSoup(page.content, "html.parser")
+    result = soup.find('ul', {"class" : "list list--kv list--col50"})
+    if result is None:
+        li = []
+    else:
+        li = result.findAll('li')
+    PE_thing = li[8]
+    PE_ratio = PE_thing.find('span', {"class" : "primary"}).text
+    
+    return float(PE_ratio)

@@ -17,11 +17,17 @@ $(document).ready(function() {
 		let stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
 		$('#stock-symbol-entry').val('');
 		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
-		assignDeleteButton(outputIndex);
+		assignHandlers(outputIndex);
 		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
+
+		// Check if dummy is still visible; if it is, delete it
+		$('#output-dummy').remove();
 
 		outputIndex++;
 	});
+
+	// Assign functions for dummy output row
+	assignHandlers('dummy');
 });
 
 
@@ -42,9 +48,15 @@ function updateSuggestions(stockSymbol, outputIndex) {
 	}
 }
 
-function getDeleteFunction(index) {
+function getDeleteHandler(index) {
 	return function() {
 		$('#output-' + index).remove()
+	}
+}
+
+function getUpdateHandler(index) {
+	return function() {
+		recommend(stocks)
 	}
 }
 
@@ -64,8 +76,8 @@ function makeInitialRow(outputIndex, symbol) {
 		+ '</tr>';
 }
 
-function assignDeleteButton(index) {
-	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteFunction(index));
+function assignHandlers(index) {
+	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteHandler(index));
 	// Remove from global stocks variable
 	let idx = stocks.findIndex(stock => stock[0] === index);
 	stocks.splice(idx, 1);
