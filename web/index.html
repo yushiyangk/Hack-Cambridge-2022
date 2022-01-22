@@ -18,26 +18,39 @@
 				<input id="add-button" type="submit" value="Add" />
 			</form>
 
-			<form id="main-table">
+			<figure>
 				<table id="output">
-					<tr>
-						<th colspan="2">Stock</th>
-						<th>Value (USD)</th>
-						<th colspan="2">ESG rating</th>
-						<th>Alternative</th>
-						<th></th>
-					</tr>
+					<thead>
+						<tr>
+							<th colspan="6">Portfolio</th>
+							<th class="spacer first-spacer"></th>
+							<th colspan="4">Suggestion</th>
+						</tr>
+						<tr>
+							<th colspan="2">Stock</th>
+							<th>Value (USD)</th>
+							<th colspan="2">ESG rating</th>
+							<th></th>
+							<th class="spacer"></th>
+							<th colspan="2">Stock</th>
+							<th colspan="2">ESG rating</th>
+						</tr>
+					</thead>
 					<tr>
 						<td class="symbol-cell">AAPL</td>
 						<td class="name-cell">Apple (Fake)</td>
 						<td class="value-cell">10000</td>
 						<td class="score-cell">50</td>
 						<td class="issues-cell">!</td>
-						<td class="alternative-cell">Google</td>
 						<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>
+						<td class="spacer"></td>
+						<td class="suggestion-symbol-cell">GOOG</td>
+						<td class="suggestion-name-cell">Google</td>
+						<td class="suggestion-score-cell">51</td>
+						<td class="suggestion-issues-cell">?</td>
 					</tr>
 				</table>
-			</form>
+			</figure>
 		</main>
 	</body>
 </html>

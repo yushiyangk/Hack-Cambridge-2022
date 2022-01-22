@@ -23,7 +23,7 @@ img.issue-icon {
 	display: inline;
 }
 
-.score-cell {
+.score-cell, .suggestion-score-cell {
 	text-align: center;
 }
 
@@ -33,4 +33,9 @@ img.issue-icon {
 }
 tr:hover .delete-button {
 	visibility: visible;
+}
+
+.spacer {
+	width: 3em;
+	border: 0;
 }
