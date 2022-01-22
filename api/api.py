@@ -30,10 +30,12 @@ def hello() -> str:
 def get_single_stock(stock_symbol: str) -> str:
 	name = query.symbol_to_name(stock_symbol)
 	score = query.get_csrhub_score(name)
+	issues = query.get_csrhub_issues(name)
 	return flask.jsonify({
 		'name': name,
 		'symbol': stock_symbol,
-		'score': score
+		'score': score,
+		'issues': issues
 	})
 
 @app.route("/api/suggestions/<stock_symbol>+<original_score>", methods=['GET'])

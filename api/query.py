@@ -51,14 +51,18 @@ def get_csrhub_issues(name):
 
     soup = BeautifulSoup(page.content, "html.parser")
     result = soup.find('ul', {"class" : "company-section_spec-issue_list"})
-    li = result.findAll('li')
+    if result is None:
+        li = []
+    else:
+        li = result.findAll('li')
+
 
     company_issues = []
     if li:
         for thing in li:
             img = thing.find('img')
             company_issues.append(img['alt'])
-    
+
     return company_issues
 
 if __name__ == '__main__':
@@ -67,6 +71,7 @@ if __name__ == '__main__':
     # Example output:
     # ['MSFT', 'GOOG', 'GOOGL', 'AMZN', 'FB', '005930', '005935', '6758', 'DELL', 'HPQ']
     for stock in stocks:
-        print(f"{stock}: {get_csrhub_score(stock)}")
+        name = name_to_csrname(symbol_to_name(stock))
+        print(f"{stock}: {get_csrhub_score(name)}, {get_csrhub_issues(name)}")
     # Known bug: 'Meta-Platforms' fails for now (still thinking about how best to fix that)
     # CSRHub requires 'Meta'
