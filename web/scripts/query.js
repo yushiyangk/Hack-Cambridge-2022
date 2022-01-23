@@ -1,14 +1,15 @@
 let alternatives = {};
 let stocks = [];
 
+let industrySuggestions = [];
+
 const ROOT = "http://127.0.0.1:5000/";
 const NUM_INDUSTRIES = 3;
 
 $(document).ready(function() {
 
-	// Populate industry dropdown menus
+	// Populate dropdown menus
 	$.getJSON(ROOT + 'api/industries', function(data) {
-		console.log(data);
 		for (i = 0; i < NUM_INDUSTRIES; i++) {
 			$dropdown = $('#industry-' + i);
 			for (j in data) {
@@ -16,13 +17,34 @@ $(document).ready(function() {
 				$dropdown.append('<option value="' + industry['id'] + '">' + industry['name'] + '</option>');
 			}
 		}
-	})
+	});
+	$.getJSON(ROOT + 'api/preferences', function(data) {
+		$dropdown = $('#preference');
+		for (j in data) {
+			preference = data[j];
+			$dropdown.append('<option value="' + preference['id'] + '">' + preference['name'] + '</option>');
+		}
+	});
 
 
 	// Industry form handler
 	$('#industry-form').submit(function(event) {
 		event.preventDefault();
 
+		let prefID = $('#preference').val();
+		industrySuggestions = [];
+		for (i = 0; i < NUM_INDUSTRIES; i++) {
+			let industryID = $('#industry-' + i).val();
+			$.getJSON(ROOT + 'api/industry_suggestion/' + prefID + '/' + industryID, function(data) {
+				topStock = data[0];
+				industrySuggestions.push(topStock);
+
+				// All data has been retrieved; make table now
+				if (industrySuggestions.length === NUM_INDUSTRIES) {
+					makeIndustryRows(industrySuggestions);
+				}
+			});
+		}
 	});
 
 
@@ -149,6 +171,15 @@ function fillRow(index, data) {
 function makeRow(data) {
 	return '<tr><td>' + data['name'] + '</td><td>' + data['symbol'] + '</td><td><input class="value-field" type="number" value="0" /></td><td>' + data['score'] + '</td><td></td><td></td></tr>'
 }
+
+
+function makeIndustryRows(suggestions) {
+	rowsHTML = ''
+	for (i = 0; i < NUM_INDUSTRIES; i++) {
+
+	}
+}
+
 
 // Loading dots: https://tenor.com/view/ellipse-dots-cycle-gif-13427673
 
