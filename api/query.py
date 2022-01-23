@@ -118,3 +118,7 @@ def get_industries_and_ranking():
         industries[industry_name] = company_info
 
     return industries
+
+def get_industry_list(industries):
+    return list(industries.keys())
+
