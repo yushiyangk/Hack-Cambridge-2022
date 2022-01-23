@@ -19,6 +19,7 @@ name_cache = {}
 score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
+profit_cache = {}
 industries_cache = None
 preferences_list = [
 	{'id':'0', 'name': 'More Sustainable', 'alpha': 0.8},
@@ -114,10 +115,10 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				name_cache[stock_symbol] = name
 
 			if stock_symbol in score_cache:
-				score = score_cache[stock_symbol]
+				esg = score_cache[stock_symbol]
 			else:
-				score = query.get_csrhub_score(name)
-				score_cache[stock_symbol] = score
+				esg = query.get_csrhub_score(name)
+				score_cache[stock_symbol] = esg
 
 			if stock_symbol in issues_cache:
 				issues = issues_cache[stock_symbol]
@@ -125,8 +126,12 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				issues = query.get_csrhub_issues(name)
 				issues_cache[stock_symbol] = issues
 			
-			profit = query.get_PE_ratio(stock_symbol)
-			esg = query.get_csrhub_score(query.name_to_csrname(name))
+			if stock_symbol in profit_cache:
+				profit = profit_cache[stock_symbol]
+			else:
+				profit = query.get_PE_ratio(stock_symbol)
+				profit_cache[stock_symbol] = profit
+
 			score = esg * alpha + profit * (1 - alpha)
 			scores.append({
 				'industry name': industry['name'], 
