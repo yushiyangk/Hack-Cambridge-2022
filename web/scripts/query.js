@@ -24,12 +24,12 @@ $(document).ready(function() {
 		event.preventDefault();
 
 	});
-	
-	
-	ventDefault();
+
+
 	$('#save-form').submit(event => {
 		event.preventDefault();
 		exportCSV();
+	});
 
 
 	// Main form handler
