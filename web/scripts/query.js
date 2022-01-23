@@ -88,7 +88,8 @@ function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
 		+ '<td class"symbol-cell">' + symbol + '</td>'
 		+ '<td class="name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
-		+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 /></td>'
+		+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 ' +
+		'oninput="validity.valid||(value=\'\');" /></td>'
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>'
@@ -102,7 +103,7 @@ function makeInitialRow(outputIndex, symbol) {
 
 function assignHandlers(index) {
 	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteHandler(index));
-	$('#output-' + index + ' > .value-cell > .value-field').change(getUpdateHandler(index));
+	$('#output-' + index + ' > .value-cell > .value-field').on("keyup change", getUpdateHandler(index));
 }
 
 function fillRow(index, data) {
@@ -169,5 +170,16 @@ function recommend() {
 		$('#output-' + stock[0] + ' > .suggestion-symbol-cell').html(recommendations[stock[1]]['symbol']);
 		$('#output-' + stock[0] + ' > .suggestion-name-cell').html(recommendations[stock[1]]['name']);
 		$('#output-' + stock[0] + ' > .suggestion-score-cell').html(recommendations[stock[1]]['score']).css('color', d3.interpolateRdYlGn(recommendations[stock[1]]['score'] / 100));
+
+		if (recommendations[stock[1]]['symbol'] === stock[1]) {
+			// Grey colour if keep same stock
+			$('#output-' + stock[0] + ' > .suggestion-symbol-cell').css('color', 'grey');
+			$('#output-' + stock[0] + ' > .suggestion-name-cell').css('color', 'grey');
+			$('#output-' + stock[0] + ' > .suggestion-value-cell').css('color', 'grey');
+		} else {
+			$('#output-' + stock[0] + ' > .suggestion-symbol-cell').css('color', 'black');
+			$('#output-' + stock[0] + ' > .suggestion-name-cell').css('color', 'black');
+			$('#output-' + stock[0] + ' > .suggestion-value-cell').css('color', 'black');
+		}
 	});
 }
