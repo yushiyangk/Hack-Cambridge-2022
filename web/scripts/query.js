@@ -117,7 +117,7 @@ function recommend() {
 
 	// Assume stocks is sorted in order of priority
 	let recommendations = {};
-	let recommended = new Set();
+	let recommended = [];
 	stocksSorted.forEach((stock, i) => {
 		let stockIndex = stock[0];
 		let stockSymbol = stock[1];
@@ -132,16 +132,17 @@ function recommend() {
 		for (let alternative of alternatives[stockSymbol]) {
 			let alternativeSymbol = alternative['symbol'];
 			console.log(alternativeSymbol);
-			if (!recommended.has(alternativeSymbol)) {
+			if (!recommended.includes(alternativeSymbol)) {
 				// Check if recommended before
 				recommendations[stockSymbol] = alternative;
-				recommended.add(alternativeSymbol);
+				recommended.push(alternativeSymbol);
+				console.log(recommended);
 				useDefault = false;
 				break;
 			}
 		}
 		if (useDefault) {
-			recommended.add(stockSymbol); // add itself
+			recommended.push(stockSymbol); // add itself
 		}
 	});
 	console.log(recommendations);
