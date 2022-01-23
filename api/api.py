@@ -21,9 +21,9 @@ issues_cache = {}
 suggestions_cache = {}
 industries_cache = None
 preferences_list = [
-	{'id':'0', 'name': 'More Sustainable', 'alpha': 0.8},
-	{'id': '1', 'name': 'Balanced', 'alpha': 0.5},
-	{'id': '2', 'name': 'More Profitable', 'alpha': 0.3}
+	{'id': 0, 'name': 'More Sustainable', 'alpha': 0.8},
+	{'id': 1, 'name': 'Balanced', 'alpha': 0.5},
+	{'id': 2, 'name': 'More Profitable', 'alpha': 0.3}
 	]
 if PERSIST:
 	name_persist_path = Path('name_persist.json')
@@ -90,12 +90,16 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 	]
 	"""
 
+	global industries_cache
 	if industries_cache is None:
 		industries_cache = query.get_industries_and_ranking()
 	industries = industries_cache
 
+	industry_id = int(industry_id)
+	preference_id = int(preference_id)
+
 	industry = next((item for item in industries if item["id"] == industry_id), None)
-	alpha = next((item['alpha'] for item in preference_list if item["id"] == preference_id), None)
+	alpha = next((item['alpha'] for item in preferences_list if item["id"] == preference_id), None)
 
 	suggestions_list = []
 	if industry == None:
@@ -124,15 +128,15 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 			else:
 				issues = query.get_csrhub_issues(name)
 				issues_cache[stock_symbol] = issues
-			
+
 			profit = query.get_PE_ratio(stock_symbol)
 			esg = query.get_csrhub_score(query.name_to_csrname(name))
 			score = esg * alpha + profit * (1 - alpha)
 			scores.append({
-				'industry name': industry['name'], 
-				'name': name, 
-				'symbol': stock_symbol, 
-				'score': score, 
+				'industry name': industry['name'],
+				'name': name,
+				'symbol': stock_symbol,
+				'score': score,
 				'issues': issues})
 
 		suggestions_list = sorted(scores, key=lambda d: d['score'])
