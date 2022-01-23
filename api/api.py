@@ -22,7 +22,7 @@ suggestions_cache = {}
 industries_cache = None
 preferences_list = [
 	{'id':'0', 'name': 'More Sustainable', 'alpha': 0.8},
-	{'id': '1', 'name': 'Balanced', 'alpha': 0.5}, 
+	{'id': '1', 'name': 'Balanced', 'alpha': 0.5},
 	{'id': '2', 'name': 'More Profitable', 'alpha': 0.3}
 	]
 if PERSIST:
@@ -61,6 +61,7 @@ def get_industries() -> str:
 	]
 	"""
 
+	global industries_cache
 	if industries_cache is None:
 		industries_cache = query.get_industries_and_ranking()
 
@@ -109,9 +110,9 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 			esg = query.get_csrhub_score(query.name_to_csrname(company_name))
 			score = esg * alpha + profit * (1 - alpha)
 			scores.append({'name': company_name, 'symbol': company_symbol, 'score': score})
-		
-		suggestions_list = sorted(scores, key=lambda d: d['score']) 
-		
+
+		suggestions_list = sorted(scores, key=lambda d: d['score'])
+
 	return flask.jsonify(suggestions_list)
 
 
