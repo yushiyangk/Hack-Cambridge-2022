@@ -9,15 +9,6 @@ import query
 
 PERSIST = True
 
-data = {}
-name = {}
-
-with open('data.csv', 'r', newline='') as csv_file:
-	csv_data = csv.reader(csv_file, delimiter=',')
-	for row in csv_data:
-		print(':'.join(row))
-		data[row[0]] = row[2]
-		name[row[0]] = row[1]
 
 app = flask.Flask(__name__)
 cors = fc.CORS(app)
