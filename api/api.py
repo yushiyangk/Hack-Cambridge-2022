@@ -19,6 +19,7 @@ name_cache = {}
 score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
+industries_cache = None
 if PERSIST:
 	name_persist_path = Path('name_persist.json')
 	if name_persist_path.is_file():
@@ -42,6 +43,49 @@ if PERSIST:
 @fc.cross_origin()
 def hello() -> str:
 	return "Hello"
+
+
+@app.route("/api/industries", methods=['GET'])
+@fc.cross_origin()
+def get_industries() -> str:
+	"""
+	Return like
+	[
+		{'id': 0, 'name': 'Mining'},
+		{'id': 1, 'name': 'Software'}
+	]
+	"""
+
+	if industries_cache is None:
+		industries_cache = query.get_industries_and_ranking()
+	industries = industries_cache
+
+	return flask.jsonify(industries_list)
+
+
+@app.route("/api/industry_suggestion/<industry_id>", methods=['GET'])
+@fc.cross_origin()
+def get_industries() -> str:
+	"""
+	Return like
+	[
+		{
+			'name': 'Microsoft',
+			'symbol': 'MSFT',
+			// whatever else
+		},
+		{
+			'name': 'Apple',
+			'symbol': 'AAPL'
+		}
+	]
+	"""
+
+	if industries_cache is None:
+		industries_cache = query.get_industries_and_ranking()
+	industries = industries_cache
+
+	return flask.jsonify(suggestions_list)
 
 
 @app.route("/api/stock/<stock_symbol>", methods=['GET'])
