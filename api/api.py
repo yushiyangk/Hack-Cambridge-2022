@@ -20,6 +20,7 @@ score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
 industries_cache = None
+preference_list = [{'id':'0', 'alpha': 0.8},{'id': '1', 'alpha': 0.5}, {'id': '2', 'alpha': 0.3}]
 if PERSIST:
 	name_persist_path = Path('name_persist.json')
 	if name_persist_path.is_file():
@@ -58,14 +59,13 @@ def get_industries() -> str:
 
 	if industries_cache is None:
 		industries_cache = query.get_industries_and_ranking()
-	industries = industries_cache
 
-	return flask.jsonify(industries_list)
+	return flask.jsonify(industries_cache)
 
 
 @app.route("/api/industry_suggestion/<preference_id>/<industry_id>", methods=['GET'])
 @fc.cross_origin()
-def get_industries(preference_id: str, industry_id: str) -> str:
+def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 	"""
 	Return like
 	[
@@ -85,6 +85,23 @@ def get_industries(preference_id: str, industry_id: str) -> str:
 		industries_cache = query.get_industries_and_ranking()
 	industries = industries_cache
 
+	industry = next((item for item in industries if item["id"] == industry_id), None)
+	alpha = next((item['alpha'] for item in preference_list if item["id"] == preference_id), None)
+
+	suggestions_list = []
+	if industry == None:
+		pass
+	else:
+		top3 = industry['top3']
+		scores = []
+		for name, symbol in top3:
+			profit = query.get_PE_ratio(symbol)
+			esg = query.get_csrhub_score(query.name_to_csrname(name))
+			score = esg * alpha + profit * (1 - alpha)
+			scores.append({'name': name, 'symbol': symbol, 'score': score})
+		
+		suggestions_list = sorted(scores, key=lambda d: d['score']) 
+		
 	return flask.jsonify(suggestions_list)
 
 

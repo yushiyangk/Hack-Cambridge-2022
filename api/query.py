@@ -90,7 +90,8 @@ def get_PE_ratio(symbol):
 
 def get_industries_and_ranking():
     '''
-    Scrapes https://www.investors.com/news/esg-companies-best-esg-stocks-industries/ for list of industries and rankings
+    Scrapes https://www.investors.com/news/esg-companies-best-esg-stocks-industries/ 
+    for list of industries and rankings
     Returns dictionary with keys as industries and top 3 companies per industry
     Output:
         {"Industry": [(1st name, 1st symbol), (2nd name, 2nd symbol), (3rd name, 3rd symbol)], ...}
@@ -102,11 +103,10 @@ def get_industries_and_ranking():
     page = requests.get(URL, headers=headers)
 
     soup = BeautifulSoup(page.content, "html.parser")
-    results = soup.find('div', {"class":"main-content-column"})
     tablesInd = soup.findAll('table')
-    industries = {}
+    industries_list = []
 
-    for industry in tablesInd:
+    for id, industry in enumerate(tablesInd):
         entries = industry.findAll('tr')
         industry_name = entries[0].find('h2').text
         company_info = []
@@ -115,12 +115,9 @@ def get_industries_and_ranking():
             company_name = details[1].text
             company_symbol = details[2].find('a').text
             company_info.append((company_name, company_symbol))
-        industries[industry_name] = company_info
+        industries_list.append({'id': id, 'name': industry, 'top3': company_info})
 
-    return industries
-
-def get_industry_list(industries):
-    return list(industries.keys())
+    return industries_list
 
 # susInd is default False (which means low sustainability)
 susInd = False
