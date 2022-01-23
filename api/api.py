@@ -32,7 +32,7 @@ if PERSIST:
 	if issues_persist_path.is_file():
 		with open(issues_persist_path, 'r') as issues_persist_file:
 			issues_cache = json.load(issues_persist_file)
-	suggestions_persist_path = Path('suggestions_persist.json')
+	suggestions_persist_path = Path('suggestions_full_persist.json')
 	if suggestions_persist_path.is_file():
 		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
 			suggestions_cache = json.load(suggestions_persist_file)
@@ -98,6 +98,20 @@ def get_suggestions(original_score: str, stock_symbol: str) -> str:
 
 	similar_stocks = query.get_similar_stocks(stock_symbol)
 	suggestions = []
+
+	# Add self to suggestions FIRST, so that self will be suggested over inferior alternatives or EQUAL alternatives
+	if stock_symbol in name_cache:
+		name = name_cache[stock_symbol]
+	else:
+		name = query.symbol_to_name(stock_symbol)
+		name_cache[stock_symbol] = name
+	if stock_symbol in score_cache:
+		score = score_cache[stock_symbol]
+	else:
+		score = query.get_csrhub_score(name)
+		score_cache[stock_symbol] = score
+	suggestions.append({'name': name, 'symbol': stock_symbol, 'score': score})
+
 	for candidate in similar_stocks:
 
 		if candidate in name_cache:
@@ -111,8 +125,10 @@ def get_suggestions(original_score: str, stock_symbol: str) -> str:
 		else:
 			candidate_score = query.get_csrhub_score(candidate_name)
 
-		if candidate_score > original_score:
-			suggestions.append({'name': candidate_name, 'symbol': candidate, 'score': candidate_score})
+		#if candidate_score > original_score:
+		#	suggestions.append({'name': candidate_name, 'symbol': candidate, 'score': candidate_score})
+		suggestions.append({'name': candidate_name, 'symbol': candidate, 'score': candidate_score})
+
 
 	suggestions.sort(key=lambda d: -1 * d['score'])
 	suggestions_cache[stock_symbol] = (original_score, suggestions)
