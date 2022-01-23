@@ -43,7 +43,7 @@ function getQueryCallback(stockSymbol, outputIndex) {
 function updateSuggestions(stockSymbol, outputIndex) {
 	return function(data) {
 		alternatives[stockSymbol] = data;
-		stocks.push([outputIndex, stockSymbol]);
+		stocks.push([outputIndex, stockSymbol, 0]);
 		recommend();
 	}
 }
@@ -54,12 +54,13 @@ function getDeleteHandler(index) {
 		// Remove from global stocks variable
 		let idx = stocks.findIndex(stock => stock[0] === index);
 		stocks.splice(idx, 1);
+		recommend();
 	}
 }
 
 function getUpdateHandler(index) {
 	return function() {
-		recommend(stocks)
+		recommend();
 	}
 }
 
@@ -81,6 +82,7 @@ function makeInitialRow(outputIndex, symbol) {
 
 function assignHandlers(index) {
 	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteHandler(index));
+	$('#output-' + index + ' > .value-cell > .value-field').change(getUpdateHandler(index));
 }
 
 function fillRow(index, data) {
@@ -108,7 +110,7 @@ function recommend() {
 	// First sort stocks by their value
 	let stocksSorted = stocks.slice();
 	stocksSorted.forEach((stock, i) => {
-		stock.push($('#output-' + stock[0] + ' > .value-cell > .value-field').val());
+		stock[2] = $('#output-' + stock[0] + ' > .value-cell > .value-field').val();
 	});
 	stocksSorted.sort((a, b) => {
 		return b[2] - a[2]; // b - a because you sort in reverse order
@@ -129,7 +131,6 @@ function recommend() {
 		let useDefault = true;
 		for (let alternative of alternatives[stockSymbol]) {
 			let alternativeSymbol = alternative['symbol'];
-			console.log(alternativeSymbol);
 			if (!recommended.includes(alternativeSymbol)) {
 				// Check if recommended before
 				recommendations[stockSymbol] = alternative;
