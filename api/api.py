@@ -136,7 +136,7 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				profit = query.get_PE_ratio(stock_symbol)
 				profit_cache[stock_symbol] = profit
 
-			score = esg * alpha + profit * (1 - alpha)
+			score = round((esg * alpha + profit * (1 - alpha)), 2)	# round to 2dp
 			scores.append({
 				'industry name': industry['name'], 
 				'name': name, 
