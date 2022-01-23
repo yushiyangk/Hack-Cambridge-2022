@@ -10,7 +10,10 @@
 }
 
 input.value-field {
-	width: 5em;
+	width: 6em;
+}
+.suggestion-value-cell {
+	text-align: right;
 }
 
 img.loading {

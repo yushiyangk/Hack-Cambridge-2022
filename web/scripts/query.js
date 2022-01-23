@@ -61,6 +61,7 @@ function getDeleteHandler(index) {
 function getUpdateHandler(index) {
 	return function() {
 		recommend();
+		$('#output-' + index + ' > .suggestion-value-cell').html($('#output-' + index + ' > .value-cell > .value-field').val());
 	}
 }
 
@@ -76,6 +77,7 @@ function makeInitialRow(outputIndex, symbol) {
 		+ '<td class="spacer"></td>'
 		+ '<td class="suggestion-symbol-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="suggestion-name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
+		+ '<td class="suggestion-value-cell">0</td>'
 		+ '<td class="suggestion-score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '</tr>';
 }
@@ -148,6 +150,6 @@ function recommend() {
 	stocksSorted.forEach((stock, i) => {
 		$('#output-' + stock[0] + ' > .suggestion-symbol-cell').html(recommendations[stock[1]]['symbol']);
 		$('#output-' + stock[0] + ' > .suggestion-name-cell').html(recommendations[stock[1]]['name']);
-		$('#output-' + stock[0] + ' > .suggestion-score-cell').html(recommendations[stock[1]]['score']);
+		$('#output-' + stock[0] + ' > .suggestion-score-cell').html(recommendations[stock[1]]['score']).css('color', d3.interpolateRdYlGn(recommendations[stock[1]]['score'] / 100));
 	});
 }
