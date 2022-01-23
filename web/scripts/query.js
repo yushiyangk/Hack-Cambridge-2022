@@ -15,20 +15,38 @@ $(document).ready(function() {
 
 		// Query stock symbol and display score
 		let stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
-		$('#stock-symbol-entry').val('');
-		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
-		assignHandlers(outputIndex);
-		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
+		if (!stockSymbol) {
+			// No symbol entered, do nothing
+		} else if (stocks.map((value, index) => {
+					return value[1];
+				}).includes(stockSymbol)) {
+			handleDuplicate(stockSymbol);
+		} else {
+			resetStatus();
+			$('#stock-symbol-entry').val('');
+			$('#output').append(makeInitialRow(outputIndex, stockSymbol));
+			assignHandlers(outputIndex);
+			$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
-		// Check if dummy is still visible; if it is, delete it
-		$('#output-dummy').remove();
+			// Check if dummy is still visible; if it is, delete it
+			$('#output-dummy').remove();
 
-		outputIndex++;
+			outputIndex++;
+		}
 	});
 
 	// Assign functions for dummy output row
 	assignHandlers('dummy');
 });
+
+
+function handleDuplicate(stockSymbol) {
+	$('#status').html(`Error: ${stockSymbol} already added.`);
+}
+
+function resetStatus() {
+	$('#status').html('');
+}
 
 
 function getQueryCallback(stockSymbol, outputIndex) {
@@ -70,7 +88,7 @@ function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
 		+ '<td class"symbol-cell">' + symbol + '</td>'
 		+ '<td class="name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
-		+ '<td class="value-cell"><input class="value-field" type="number" value="0" /></td>'
+		+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 /></td>'
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>'

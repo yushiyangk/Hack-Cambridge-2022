@@ -29,13 +29,17 @@
 		<button class="tablinks" onclick="openTab(event, 'Rookie')">Rookie</button>
 		</div>
 
-		
+
 		<div id="Expert" class="tabcontent">
 			<main>
 				<form id="main-form">
 					<input id="stock-symbol-entry" type="text" />
 					<input id="add-button" type="submit" value="Add" />
 				</form>
+
+			<div id="status"></div>
+
+
 
 				<figure>
 					<table id="output">
@@ -59,7 +63,7 @@
 						<tr id="output-dummy">
 							<td class="symbol-cell">EXPL</td>
 							<td class="name-cell">Example Inc.</td>
-							<td class="value-cell"><input class="value-field" type="number" value="0" /></td>
+							<td class="value-cell"><input class="value-field" type="number" value="0" min=0 /></td>
 							<td class="score-cell">49</td>
 							<td class="issues-cell"></td>
 							<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>
@@ -79,10 +83,10 @@
 				<form id="save-form">
 					<a href="data:application/xml;charset=utf-8,text here" download="portfolio.csv"><input type="button" value="Save portfolio" /></a>
 				</form>
-			
+
 			</main>
 		</div>
-		
+
 		<div id="Rookie" class="tabcontent">
 			<h3>London</h3>
 			<p>London is the capital city of England.</p>

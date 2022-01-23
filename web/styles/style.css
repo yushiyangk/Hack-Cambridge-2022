@@ -9,6 +9,13 @@
 	width: 15%;
 }
 
+#status {
+	margin-top: 0.5ex;
+	height: 2ex;
+	color: red;
+	font-size: small;
+}
+
 input.value-field {
 	width: 6em;
 }
