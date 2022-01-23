@@ -15,20 +15,36 @@ $(document).ready(function() {
 
 		// Query stock symbol and display score
 		let stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
-		$('#stock-symbol-entry').val('');
-		$('#output').append(makeInitialRow(outputIndex, stockSymbol));
-		assignHandlers(outputIndex);
-		$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
+		if (stocks.map((value, index) => {
+					return value[1];
+				}).includes(stockSymbol)) {
+			handleDuplicate(stockSymbol);
+		} else {
+			resetStatus();
+			$('#stock-symbol-entry').val('');
+			$('#output').append(makeInitialRow(outputIndex, stockSymbol));
+			assignHandlers(outputIndex);
+			$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
 
-		// Check if dummy is still visible; if it is, delete it
-		$('#output-dummy').remove();
+			// Check if dummy is still visible; if it is, delete it
+			$('#output-dummy').remove();
 
-		outputIndex++;
+			outputIndex++;
+		}
 	});
 
 	// Assign functions for dummy output row
 	assignHandlers('dummy');
 });
+
+
+function handleDuplicate(stockSymbol) {
+	$('#status').html(`Error: ${stockSymbol} already added.`);
+}
+
+function resetStatus() {
+	$('#status').html('');
+}
 
 
 function getQueryCallback(stockSymbol, outputIndex) {
