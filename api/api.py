@@ -26,24 +26,24 @@ preferences_list = [
 	{'id': 1, 'name': 'Balanced', 'alpha': 0.5},
 	{'id': 2, 'name': 'More Profitable', 'alpha': 0.3}
 	]
+name_persist_path = Path('name_persist.json')
+score_persist_path = Path('score_persist.json')
+issues_persist_path = Path('issues_persist.json')
+profit_persist_path = Path('profit_persist.json')
+suggestions_persist_path = Path('suggestions_full_persist.json')
 if PERSIST:
-	name_persist_path = Path('name_persist.json')
 	if name_persist_path.is_file():
 		with open(name_persist_path, 'r') as name_persist_file:
 			name_cache = json.load(name_persist_file)
-	score_persist_path = Path('score_persist.json')
 	if score_persist_path.is_file():
 		with open(score_persist_path, 'r') as score_persist_file:
 			score_cache = json.load(score_persist_file)
-	issues_persist_path = Path('issues_persist.json')
 	if issues_persist_path.is_file():
 		with open(issues_persist_path, 'r') as issues_persist_file:
 			issues_cache = json.load(issues_persist_file)
-	profit_persist_path = Path('profit_persist.json')
 	if profit_persist_path.is_file():
-		with open(profit_persist_path, 'r') as profit_persist_path:
-			profit_cache = json.load(profit_persist_path)
-	suggestions_persist_path = Path('suggestions_full_persist.json')
+		with open(profit_persist_path, 'r') as profit_persist_file:
+			profit_cache = json.load(profit_persist_file)
 	if suggestions_persist_path.is_file():
 		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
 			suggestions_cache = json.load(suggestions_persist_file)
