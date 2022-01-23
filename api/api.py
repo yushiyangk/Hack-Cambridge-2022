@@ -19,8 +19,13 @@ name_cache = {}
 score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
+profit_cache = {}
 industries_cache = None
-preference_list = [{'id':'0', 'alpha': 0.8},{'id': '1', 'alpha': 0.5}, {'id': '2', 'alpha': 0.3}]
+preferences_list = [
+	{'id': 0, 'name': 'More Sustainable', 'alpha': 0.8},
+	{'id': 1, 'name': 'Balanced', 'alpha': 0.5},
+	{'id': 2, 'name': 'More Profitable', 'alpha': 0.3}
+	]
 if PERSIST:
 	name_persist_path = Path('name_persist.json')
 	if name_persist_path.is_file():
@@ -34,6 +39,10 @@ if PERSIST:
 	if issues_persist_path.is_file():
 		with open(issues_persist_path, 'r') as issues_persist_file:
 			issues_cache = json.load(issues_persist_file)
+	profit_persist_path = Path('profit_persist.json')
+	if profit_persist_path.is_file():
+		with open(profit_persist_path, 'r') as profit_persist_path:
+			profit_cache = json.load(profit_persist_path)
 	suggestions_persist_path = Path('suggestions_full_persist.json')
 	if suggestions_persist_path.is_file():
 		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
@@ -57,11 +66,16 @@ def get_industries() -> str:
 	]
 	"""
 
+	global industries_cache
 	if industries_cache is None:
 		industries_cache = query.get_industries_and_ranking()
 
 	return flask.jsonify(industries_cache)
 
+@app.route("/api/preferences", methods=['GET'])
+@fc.cross_origin()
+def get_preferences() -> str:
+	return flask.jsonify(preferences_list)
 
 @app.route("/api/industry_suggestion/<preference_id>/<industry_id>", methods=['GET'])
 @fc.cross_origin()
@@ -81,12 +95,16 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 	]
 	"""
 
+	global industries_cache
 	if industries_cache is None:
 		industries_cache = query.get_industries_and_ranking()
 	industries = industries_cache
 
+	industry_id = int(industry_id)
+	preference_id = int(preference_id)
+
 	industry = next((item for item in industries if item["id"] == industry_id), None)
-	alpha = next((item['alpha'] for item in preference_list if item["id"] == preference_id), None)
+	alpha = next((item['alpha'] for item in preferences_list if item["id"] == preference_id), None)
 
 	suggestions_list = []
 	if industry == None:
@@ -94,14 +112,54 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 	else:
 		top3 = industry['top3']
 		scores = []
-		for name, symbol in top3:
-			profit = query.get_PE_ratio(symbol)
-			esg = query.get_csrhub_score(query.name_to_csrname(name))
-			score = esg * alpha + profit * (1 - alpha)
-			scores.append({'name': name, 'symbol': symbol, 'score': score})
-		
-		suggestions_list = sorted(scores, key=lambda d: d['score']) 
-		
+		for company in top3:
+			company_name = company['name']
+			stock_symbol = company['symbol']
+
+			if stock_symbol in name_cache:
+				name = name_cache[stock_symbol]
+			else:
+				name = company_name
+				name_cache[stock_symbol] = name
+
+			if stock_symbol in score_cache:
+				esg = score_cache[stock_symbol]
+			else:
+				esg = query.get_csrhub_score(name)
+				score_cache[stock_symbol] = esg
+
+			if stock_symbol in issues_cache:
+				issues = issues_cache[stock_symbol]
+			else:
+				issues = query.get_csrhub_issues(name)
+				issues_cache[stock_symbol] = issues
+
+			if stock_symbol in profit_cache:
+				profit = profit_cache[stock_symbol]
+			else:
+				profit = query.get_PE_ratio(stock_symbol)
+				profit_cache[stock_symbol] = profit
+
+			score = round((esg * alpha + profit * (1 - alpha)), 2)	# round to 2dp
+			scores.append({
+				'industry name': industry['name'],
+				'name': name,
+				'symbol': stock_symbol,
+				'score': score,
+				'issues': issues})
+
+		suggestions_list = sorted(scores, key=lambda d: d['score'])
+
+	if PERSIST:
+		with open(name_persist_path, 'w') as name_persist_file:
+			json.dump(name_cache, name_persist_file)
+		with open(score_persist_path, 'w') as score_persist_file:
+			json.dump(score_cache, score_persist_file)
+		with open(issues_persist_path, 'w') as issues_persist_file:
+			json.dump(issues_cache, issues_persist_file)
+		with open(profit_persist_path, 'w') as profit_persist_file:
+			json.dump(profit_cache, profit_persist_file)
+
 	return flask.jsonify(suggestions_list)
 
 

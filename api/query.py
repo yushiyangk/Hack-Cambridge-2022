@@ -114,8 +114,8 @@ def get_industries_and_ranking():
             details = entries[i].findAll('td')
             company_name = details[1].text
             company_symbol = details[2].find('a').text
-            company_info.append((company_name, company_symbol))
-        industries_list.append({'id': id, 'name': industry, 'top3': company_info})
+            company_info.append({'name':company_name, 'symbol': company_symbol})
+        industries_list.append({'id': id, 'name': industry_name, 'top3': company_info})
 
     return industries_list
 
