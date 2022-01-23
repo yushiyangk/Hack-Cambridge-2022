@@ -20,7 +20,11 @@ score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
 industries_cache = None
-preference_list = [{'id':'0', 'alpha': 0.8},{'id': '1', 'alpha': 0.5}, {'id': '2', 'alpha': 0.3}]
+preferences_list = [
+	{'id':'0', 'name': 'More Sustainable', 'alpha': 0.8},
+	{'id': '1', 'name': 'Balanced', 'alpha': 0.5}, 
+	{'id': '2', 'name': 'More Profitable', 'alpha': 0.3}
+	]
 if PERSIST:
 	name_persist_path = Path('name_persist.json')
 	if name_persist_path.is_file():
@@ -62,6 +66,10 @@ def get_industries() -> str:
 
 	return flask.jsonify(industries_cache)
 
+@app.route("/api/preferences", methods=['GET'])
+@fc.cross_origin()
+def get_preferences() -> str:
+	return flask.jsonify(preferences_list)
 
 @app.route("/api/industry_suggestion/<preference_id>/<industry_id>", methods=['GET'])
 @fc.cross_origin()
