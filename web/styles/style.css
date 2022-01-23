@@ -59,6 +59,8 @@ tr:hover .delete-button {
 overflow: hidden;
 border: 1px solid #ccc;
 background-color: #f1f1f1;
+height: 50px;
+position: relative;
 }
 
 /* Style the buttons inside the tab */
@@ -81,6 +83,16 @@ background-color: #ddd;
 /* Create an active/current tablink class */
 .tab button.active {
 background-color: #ccc;
+}
+
+/* Centralize tab */
+.center {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 /* Style the tab content */
