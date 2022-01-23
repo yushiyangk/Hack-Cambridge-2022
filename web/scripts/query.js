@@ -83,7 +83,7 @@ function assignHandlers(index) {
 
 function fillRow(index, data) {
 	$('#output-' + index + ' > .name-cell').html(data['name']);
-	$('#output-' + index + ' > .score-cell').html(data['score']);
+	$('#output-' + index + ' > .score-cell').html(data['score']).css('color', d3.interpolateRdYlGn(data['score'] / 100));
 
 	// Issues symbols
 	issuesData = data['issues']
