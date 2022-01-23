@@ -46,3 +46,10 @@ tr:hover .delete-button {
 #output-dummy {
 	color: #999999;
 }
+
+tr.bad-output {
+	color: #999999;
+}
+tr.bad-output .delete-button {
+	visibility: visible;
+}

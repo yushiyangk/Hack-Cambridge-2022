@@ -33,6 +33,11 @@ $(document).ready(function() {
 
 function getQueryCallback(stockSymbol, outputIndex) {
 	return function(data) {
+		if (data['score'] === -1) {
+			invalidateRow(outputIndex);
+			return;
+		}
+
 		fillRow(outputIndex, data);
 		let score = $('#output-' + outputIndex + ' > .score-cell').html();
 		$.getJSON(ROOT + 'api/suggestions/' + stockSymbol + '+' + score, updateSuggestions(stockSymbol, outputIndex));
@@ -61,7 +66,9 @@ function getDeleteHandler(index) {
 function getUpdateHandler(index) {
 	return function() {
 		recommend();
-		$('#output-' + index + ' > .suggestion-value-cell').html($('#output-' + index + ' > .value-cell > .value-field').val());
+		if (!$('#output-' + index).hasClass('bad-output')) {
+			$('#output-' + index + ' > .suggestion-value-cell').html($('#output-' + index + ' > .value-cell > .value-field').val());
+		}
 	}
 }
 
@@ -86,6 +93,18 @@ function assignHandlers(index) {
 	$('#output-' + index + ' > .delete-cell > .delete-button').click(getDeleteHandler(index));
 	$('#output-' + index + ' > .value-cell > .value-field').change(getUpdateHandler(index));
 }
+
+function invalidateRow(index) {
+	$('#output-' + index + ' > .name-cell').html('Unknown');
+	$('#output-' + index + ' > .score-cell').html('-1');
+	$('#output-' + index + ' > .issues-cell').html('');
+	$('#output-' + index + ' > .suggestion-symbol-cell').html('');
+	$('#output-' + index + ' > .suggestion-name-cell').html('');
+	$('#output-' + index + ' > .suggestion-value-cell').html('');
+	$('#output-' + index + ' > .suggestion-score-cell').html('');
+	$('#output-' + index).addClass('bad-output');
+}
+
 
 function fillRow(index, data) {
 	$('#output-' + index + ' > .name-cell').html(data['name']);
