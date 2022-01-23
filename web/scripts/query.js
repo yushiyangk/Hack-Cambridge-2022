@@ -286,6 +286,8 @@ function recommend() {
 			$('#output-' + stock[0] + ' > .suggestion-value-cell').css('color', 'black');
 		}
 	});
+
+	drawChart();
 }
 
 function exportCSV() {
@@ -363,4 +365,68 @@ function uploadCSV(file) {
 	} else {
 		alert("Failed to load file.");
 	}
+}
+
+function drawChart() {
+	// Set dimensions
+	var svg = d3.select("svg"),
+	width = svg.attr("width"),
+	height = svg.attr("height"),
+	radius = 200;
+
+	// Dataset
+	let total = 0;
+	let data = [];
+	stocks.forEach(stock => {
+		let value = $('#output-' + stock[0] + ' > .value-cell > .value-field').val();
+		if (value > 0) {
+			data.push({
+				name: stock[1],
+				share: value
+			});
+			total += value;
+		}
+	});
+	data.forEach(d => {
+		d.share /= total;
+	});
+
+	var g = svg.append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+	// Set Scale
+	var ordScale = d3.scaleOrdinal()
+									.domain(data)
+									.range(['#ffd384','#94ebcd','#fbaccc','#d3e0ea','#fa7f72']);
+
+	// Generate Pie
+	var pie = d3.pie().value(function(d) {
+			return d.share;
+	});
+
+	var arc = g.selectAll("arc")
+			.data(pie(data))
+			.enter();
+
+	// Fill Chart
+	var path = d3.arc()
+					.outerRadius(radius)
+					.innerRadius(0);
+
+	arc.append("path")
+	.attr("d", path)
+	.attr("fill", function(d) { return ordScale(d.data.name); });
+
+	// Add labels
+	var label = d3.arc()
+					.outerRadius(radius)
+					.innerRadius(0);
+
+	arc.append("text")
+	.attr("transform", function(d) {
+					return "translate(" + label.centroid(d) + ")";
+	})
+	.text(function(d) { return d.data.name; })
+	.style("font-family", "arial")
+	.style("font-size", 15);
 }
