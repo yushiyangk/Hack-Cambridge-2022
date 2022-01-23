@@ -63,12 +63,17 @@ $(document).ready(function() {
 		exportCSV();
 	});
 
-
 	// Load CSV
 	$('#upload-file').change(event => {
 		event.preventDefault();
 		uploadCSV(event.target.files[0]);
 	})
+
+	// Save CSV for rookie tab
+	$('#save-button-rookie').click(event => {
+		event.preventDefault();
+		exportCSVRookie();
+	});
 
 	// Main form handler
 
@@ -301,6 +306,28 @@ function exportCSV() {
 	let encoded = encodeURI(content);
 	$('#save-link').attr('href', encoded);
 	$('#save-link')[0].click();
+}
+
+function exportCSVRookie() {
+	let symbols = [];
+	let values = [];
+	$('#industry-body > tr > .symbol-cell ').each(function(i, element) {symbols.push($(element).html());});
+	$('#industry-body > tr > .value-cell > .value-field').each(function(i, element) {values.push($(element).val());});
+
+	let rows = [["Stock", "Value"]];
+	symbols.forEach((symbol, i) => {
+		rows.push([symbol, values[i]]);
+	});
+
+	let content = "data:text/csv;charset=utf-8,";
+	rows.forEach(arr => {
+    let row = arr.join(",");
+    content += row + "\n";
+	});
+
+	let encoded = encodeURI(content);
+	$('#save-link-rookie').attr('href', encoded);
+	$('#save-link-rookie')[0].click();
 }
 
 function uploadCSV(file) {
