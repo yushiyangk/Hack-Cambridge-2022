@@ -201,3 +201,9 @@ def calculateAggScore(susData, profData, susInd):
 
     # returns the company with the best aggregate score
     return company
+
+def get_recommendation():
+    '''
+    Returns the best aggregate score
+    '''
+    calculateAggScore(get_susData(), get_profData(), True)
