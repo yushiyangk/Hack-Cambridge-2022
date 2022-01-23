@@ -15,7 +15,9 @@ $(document).ready(function() {
 
 		// Query stock symbol and display score
 		let stockSymbol = $('#stock-symbol-entry').val().trim().toUpperCase();
-		if (stocks.map((value, index) => {
+		if (!stockSymbol) {
+			// No symbol entered, do nothing
+		} else if (stocks.map((value, index) => {
 					return value[1];
 				}).includes(stockSymbol)) {
 			handleDuplicate(stockSymbol);
@@ -86,7 +88,7 @@ function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
 		+ '<td class"symbol-cell">' + symbol + '</td>'
 		+ '<td class="name-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
-		+ '<td class="value-cell"><input class="value-field" type="number" value="0" /></td>'
+		+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 /></td>'
 		+ '<td class="score-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="issues-cell"><img class="loading" src="images/loading.gif" alt="Loading..." /></td>'
 		+ '<td class="delete-cell"><a class="delete-button"><img class="delete-icon" src="images/delete.png" /></a></td>'
