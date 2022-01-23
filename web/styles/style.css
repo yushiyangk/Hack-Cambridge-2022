@@ -50,7 +50,7 @@ tr:hover .delete-button {
 	border: 0;
 }
 
-#output-dummy {
+#output-dummy, #industry-dummy {
 	color: #999999;
 }
 

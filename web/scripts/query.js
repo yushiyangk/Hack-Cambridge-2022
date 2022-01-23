@@ -1,7 +1,8 @@
 let alternatives = {};
 let stocks = [];
 
-let industrySuggestions = [];
+let industrySuggestions = {};
+let industries = [];
 
 const ROOT = "http://127.0.0.1:5000/";
 const NUM_INDUSTRIES = 3;
@@ -32,16 +33,18 @@ $(document).ready(function() {
 		event.preventDefault();
 
 		let prefID = $('#preference').val();
-		industrySuggestions = [];
+		industrySuggestions = {};
+		industries = [];
 		for (i = 0; i < NUM_INDUSTRIES; i++) {
 			let industryID = $('#industry-' + i).val();
+			console.log(ROOT + 'api/industry_suggestion/' + prefID + '/' + industryID);
 			$.getJSON(ROOT + 'api/industry_suggestion/' + prefID + '/' + industryID, function(data) {
-				topStock = data[0];
-				industrySuggestions.push(topStock);
+				industrySuggestions[industryID] = data;
+				industries.push(industryID);
 
 				// All data has been retrieved; make table now
-				if (industrySuggestions.length === NUM_INDUSTRIES) {
-					makeIndustryRows(industrySuggestions);
+				if (industries.length === NUM_INDUSTRIES) {
+					$('#industry-body').html(makeIndustryRows(industrySuggestions));
 				}
 			});
 		}
@@ -131,6 +134,33 @@ function getUpdateHandler(index) {
 }
 
 
+function makeIndustryRows(suggestions) {
+	rowsHTML = '';
+	recommended = [];
+	for (i in industries) {
+		industryID = industries[i];
+
+		specificSuggestions = suggestions[industryID];
+		for (j in specificSuggestions) {
+			suggestion = specificSuggestions[j];
+			if (!recommended.includes(suggestion['symbol'])) {
+				recommended.push(suggestion['symbol']);
+				break;
+			}
+		}
+		sd = suggestion;
+		rowsHTML += '<tr>'
+			+ '<td class="industry-cell">' + sd['industry name'] + '</td>'
+			+ '<td class="symbol-cell">' + sd['symbol'] + '</td>'
+			+ '<td class="name-cell">' + sd['name'] + '</td>'
+			+ '<td class="score-cell">' + sd['score'] + '</td>'
+			+ '<td class="issues-cell">' + sd['issues'] + '</td>'
+			+ '</tr>';
+	}
+	return rowsHTML;
+}
+
+
 function makeInitialRow(outputIndex, symbol) {
 	return '<tr id="output-' + outputIndex +'">'
 		+ '<td class"symbol-cell">' + symbol + '</td>'
@@ -170,14 +200,6 @@ function fillRow(index, data) {
 
 function makeRow(data) {
 	return '<tr><td>' + data['name'] + '</td><td>' + data['symbol'] + '</td><td><input class="value-field" type="number" value="0" /></td><td>' + data['score'] + '</td><td></td><td></td></tr>'
-}
-
-
-function makeIndustryRows(suggestions) {
-	rowsHTML = ''
-	for (i = 0; i < NUM_INDUSTRIES; i++) {
-
-	}
 }
 
 
