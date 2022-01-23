@@ -102,11 +102,13 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 	else:
 		top3 = industry['top3']
 		scores = []
-		for name, symbol in top3:
-			profit = query.get_PE_ratio(symbol)
-			esg = query.get_csrhub_score(query.name_to_csrname(name))
+		for company in top3:
+			company_name = company['name']
+			company_symbol = company['symbol']
+			profit = query.get_PE_ratio(company_symbol)
+			esg = query.get_csrhub_score(query.name_to_csrname(company_name))
 			score = esg * alpha + profit * (1 - alpha)
-			scores.append({'name': name, 'symbol': symbol, 'score': score})
+			scores.append({'name': company_name, 'symbol': company_symbol, 'score': score})
 		
 		suggestions_list = sorted(scores, key=lambda d: d['score']) 
 		
