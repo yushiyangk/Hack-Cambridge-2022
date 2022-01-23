@@ -163,6 +163,8 @@ function makeIndustryRows(suggestions) {
 			+ '<td class="industry-cell">' + sd['industry name'] + '</td>'
 			+ '<td class="symbol-cell">' + sd['symbol'] + '</td>'
 			+ '<td class="name-cell">' + sd['name'] + '</td>'
+			+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 ' +
+			'oninput="validity.valid||(value=\'\');" /></td>'
 			+ '<td class="score-cell">' + sd['score'] + '</td>'
 			+ '<td class="issues-cell">' + sd['issues'] + '</td>'
 			+ '</tr>';
