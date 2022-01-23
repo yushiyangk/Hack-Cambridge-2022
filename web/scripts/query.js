@@ -108,7 +108,7 @@ function recommend() {
 	// First sort stocks by their value
 	let stocksSorted = stocks.slice();
 	stocksSorted.forEach((stock, i) => {
-		stock.push($('output-' + stock[0] + ' > .value-cell > .value-field').val());
+		stock.push($('#output-' + stock[0] + ' > .value-cell > .value-field').val());
 	});
 	stocksSorted.sort((a, b) => {
 		return a[2] - b[2];
@@ -119,37 +119,29 @@ function recommend() {
 	let recommendations = {};
 	let recommended = new Set();
 	stocksSorted.forEach((stock, i) => {
+		let stockIndex = stock[0];
+		let stockSymbol = stock[1];
 		// Default to recommending itself
-		recommendations[stock[1]] = {
-			'symbol': stock[1],
-			'name': $('#output-' + stock[0] + ' > .name-cell').html(),
-			'score': $('#output-' + stock[0] + ' > .score-cell').html()
+		console.log(recommended);
+		recommendations[stockSymbol] = {
+			'symbol': stockSymbol,
+			'name': $('#output-' + stockIndex + ' > .name-cell').html(),
+			'score': $('#output-' + stockIndex + ' > .score-cell').html()
 		};
-		stock = stock[1]; // keep just the symbol now
-
-		if (recommended.has(stock)) {
-			// Stock previously recommended already. The default is correct so we do nothing
-		} else {
-			// Need to loop through alternatives
-			for (let alternative of alternatives[stock]) {
-				let symbol = alternative['symbol'];
-				if (stocks.includes(symbol)) {
-					// The alternative is already in our portfolio
-					recommended.add(symbol);
-					// Swap recommendations if the stock already recommended something else earlier
-					if (recommendations[symbol] !== undefined && recommendations[symbol] !== symbol) {
-						recommendations[stock] = recommendations[symbol];
-						recommendations[symbol] = alternative;
-						break;
-					}
-					// Otherwise, continue the for loop
-				} else if (!recommended.has(symbol)) {
-					// Update
-					recommendations[stock] = alternative;
-					recommended.add(symbol);
-					break;
-				}
+		let useDefault = true;
+		for (let alternative of alternatives[stockSymbol]) {
+			let alternativeSymbol = alternative['symbol'];
+			console.log(alternativeSymbol);
+			if (!recommended.has(alternativeSymbol)) {
+				// Check if recommended before
+				recommendations[stockSymbol] = alternative;
+				recommended.add(alternativeSymbol);
+				useDefault = false;
+				break;
 			}
+		}
+		if (useDefault) {
+			recommended.add(stockSymbol); // add itself
 		}
 	});
 	console.log(recommendations);
