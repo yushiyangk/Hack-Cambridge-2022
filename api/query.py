@@ -119,9 +119,6 @@ def get_industries_and_ranking():
 
     return industries_list
 
-def get_industry_list(industries):
-    return list(industries.keys())
-
 # susInd is default False (which means low sustainability)
 susInd = False
 
