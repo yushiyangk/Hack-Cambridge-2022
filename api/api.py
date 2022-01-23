@@ -63,9 +63,9 @@ def get_industries() -> str:
 	return flask.jsonify(industries_list)
 
 
-@app.route("/api/industry_suggestion/<industry_id>", methods=['GET'])
+@app.route("/api/industry_suggestion/<preference_id>/<industry_id>", methods=['GET'])
 @fc.cross_origin()
-def get_industries() -> str:
+def get_industries(preference_id: str, industry_id: str) -> str:
 	"""
 	Return like
 	[

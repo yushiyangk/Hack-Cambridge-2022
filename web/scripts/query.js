@@ -2,13 +2,32 @@ let alternatives = {};
 let stocks = [];
 
 const ROOT = "http://127.0.0.1:5000/";
+const NUM_INDUSTRIES = 3;
 
 $(document).ready(function() {
 
+	// Populate industry dropdown menus
+	$.getJSON(ROOT + 'api/industries', function(data) {
+		console.log(data);
+		for (i = 0; i < NUM_INDUSTRIES; i++) {
+			$dropdown = $('#industry-' + i);
+			for (j in data) {
+				industry = data[j];
+				$dropdown.append('<option value="' + industry['id'] + '">' + industry['name'] + '</option>');
+			}
+		}
+	})
 
+
+	// Industry form handler
+	$('#industry-form').submit(function(event) {
+		event.preventDefault();
+
+	});
+
+
+	// Main form handler
 	var outputIndex = 0;
-
-
 
 	$('#main-form').submit(function(event) {
 		event.preventDefault();
