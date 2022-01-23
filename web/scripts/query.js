@@ -6,6 +6,11 @@ const ROOT = "http://127.0.0.1:5000/";
 $(document).ready(function() {
 
 
+	$('#save-form').submit(event => {
+		event.preventDefault();
+		exportCSV();
+	});
+
 	var outputIndex = 0;
 
 
@@ -166,7 +171,7 @@ function recommend() {
 	});
 
 	// Update
-	stocksSorted.forEach((stock, i) => {
+	stocksSorted.forEach(stock => {
 		$('#output-' + stock[0] + ' > .suggestion-symbol-cell').html(recommendations[stock[1]]['symbol']);
 		$('#output-' + stock[0] + ' > .suggestion-name-cell').html(recommendations[stock[1]]['name']);
 		$('#output-' + stock[0] + ' > .suggestion-score-cell').html(recommendations[stock[1]]['score']).css('color', d3.interpolateRdYlGn(recommendations[stock[1]]['score'] / 100));
@@ -182,4 +187,25 @@ function recommend() {
 			$('#output-' + stock[0] + ' > .suggestion-value-cell').css('color', 'black');
 		}
 	});
+}
+
+function exportCSV() {
+	let rows = [["Stock", "Value"]];
+	stocks.forEach(stock => {
+		rows.push([
+			stock[1],
+			$('#output-' + stock[0] + ' > .value-cell > .value-field').val()
+		]);
+	});
+
+	let content = "data:text/csv;charset=utf-8,";
+	rows.forEach(arr => {
+    let row = arr.join(",");
+    content += row + "\n";
+	});
+
+	console.log(content);
+	let encoded = encodeURI(content);
+	$('#save-link').attr('href', encoded);
+	$('#save-link')[0].click();
 }
