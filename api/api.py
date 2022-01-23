@@ -148,7 +148,7 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				'score': score,
 				'issues': issues})
 
-		suggestions_list = sorted(scores, key=lambda d: d['score'])
+		suggestions_list = sorted(scores, key=lambda d: d['score'], reverse=True)
 
 	if PERSIST:
 		with open(name_persist_path, 'w') as name_persist_file:
