@@ -1,8 +1,15 @@
 let alternatives = {};
 let stocks = [];
+let outputCounter = 0;
 
 const ROOT = "http://127.0.0.1:5000/";
 const NUM_INDUSTRIES = 3;
+
+function addStock(outputIndex, stockSymbol) {
+	$('#output').append(makeInitialRow(outputIndex, stockSymbol));
+	assignHandlers(outputIndex);
+	$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex));
+}
 
 $(document).ready(function() {
 
@@ -24,16 +31,21 @@ $(document).ready(function() {
 		event.preventDefault();
 
 	});
-	
-	
-	ventDefault();
-	$('#save-form').submit(event => {
+
+	// Save CSV
+	$('#save-button').click(event => {
 		event.preventDefault();
 		exportCSV();
+	});
 
+
+	// Load CSV
+	$('#upload-file').change(event => {
+		event.preventDefault();
+		uploadCSV(event.target.files[0]);
+	})
 
 	// Main form handler
-	var outputIndex = 0;
 
 	$('#main-form').submit(function(event) {
 		event.preventDefault();
@@ -49,14 +61,12 @@ $(document).ready(function() {
 		} else {
 			resetStatus();
 			$('#stock-symbol-entry').val('');
-			$('#output').append(makeInitialRow(outputIndex, stockSymbol));
-			assignHandlers(outputIndex);
-			$.getJSON(ROOT + 'api/stock/' + stockSymbol, getQueryCallback(stockSymbol, outputIndex))
+			addStock(outputCounter, stockSymbol);
 
 			// Check if dummy is still visible; if it is, delete it
 			$('#output-dummy').remove();
 
-			outputIndex++;
+			outputCounter++;
 		}
 	});
 
@@ -224,8 +234,42 @@ function exportCSV() {
     content += row + "\n";
 	});
 
-	console.log(content);
 	let encoded = encodeURI(content);
 	$('#save-link').attr('href', encoded);
 	$('#save-link')[0].click();
+}
+
+function uploadCSV(file) {
+	if (file) {
+		let r = new FileReader();
+		r.onload = e => {
+			let contents = e.target.result;
+			let lines = contents.split("\n"); // last element is empty
+			lines.splice(-1);
+
+			// First delete everything
+			let stocksCopy = stocks.slice();
+			stocksCopy.forEach(stock => {
+				$('#output-' + stock[0]).remove()
+				// Remove from global stocks variable
+				let idx = stocks.findIndex(s => s[0] === stock[0]);
+				stocks.splice(idx, 1);
+			})
+
+			// Add
+			lines.slice(1).forEach(line => {
+				let words = line.split(",");
+				addStock(outputCounter, words[0]);
+				$('#output-' + outputCounter + ' > .value-cell > .value-field').val(words[1]);
+				$('#output-' + outputCounter + ' > .suggestion-value-cell').html(words[1]);
+				outputCounter++;
+			});
+
+			// Check if dummy is still visible; if it is, delete it
+			$('#output-dummy').remove();
+		};
+		r.readAsText(file);
+	} else {
+		alert("Failed to load file.");
+	}
 }
