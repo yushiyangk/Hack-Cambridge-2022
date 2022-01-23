@@ -159,6 +159,15 @@ function makeIndustryRows(suggestions) {
 			}
 		}
 		sd = suggestion;
+
+		// Issues symbols
+		issuesData = sd['issues']
+		issuesHTML = ""
+		for (i in issuesData) {
+			issueData = issuesData[i]
+			issuesHTML += '<img class="issue-icon" src="' + issueData['img'] + '" title="' + issueData['issue'] + '" />'
+		}
+
 		rowsHTML += '<tr>'
 			+ '<td class="industry-cell">' + sd['industry name'] + '</td>'
 			+ '<td class="symbol-cell">' + sd['symbol'] + '</td>'
@@ -166,7 +175,7 @@ function makeIndustryRows(suggestions) {
 			+ '<td class="value-cell"><input class="value-field" type="number" value="0" min=0 ' +
 			'oninput="validity.valid||(value=\'\');" /></td>'
 			+ '<td class="score-cell">' + sd['score'] + '</td>'
-			+ '<td class="issues-cell">' + sd['issues'] + '</td>'
+			+ '<td class="issues-cell">' + issuesHTML + '</td>'
 			+ '</tr>';
 	}
 	return rowsHTML;
