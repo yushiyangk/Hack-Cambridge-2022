@@ -14,6 +14,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
 		<script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
 		<script src="https://cdn.jsdelivr.net/npm/d3-scale-chromatic@3"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
 
 		<script type="text/javascript" src="scripts/query.js"></script>
 		<script type="text/javascript" src="scripts/tabs.js"></script>
@@ -21,7 +22,7 @@
 		<link rel="stylesheet" type="text/css" href="styles/style.css" />
 	</head>
 	<body>
-		<h2>Tabs</h2>
+		<h2>GR-IN</h2>
 		<p>Click on the buttons inside the tabbed menu: 
 			<br> If you have a portfolio that you would like to optimize for better ESG ratings, choose the expert tab.
 			<br> If you would like a porfolio recommended to you, choose the Rookie tab.
@@ -87,6 +88,9 @@
 					<a id="save-link" download="portfolio.csv"><input id="save-button" type="button" value="Save portfolio" /></a>
 					<a id="upload-link"><input id="upload-file" type="file" /></a>
 				</form>
+				
+				<svg width="500" height="400" style="margin: 50px"></svg> <!--Step 2-->
+				<script type="text/javascript" src="scripts/pie.js"></script>
 
 			</main>
 		</div>
