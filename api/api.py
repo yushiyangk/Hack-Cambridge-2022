@@ -1,10 +1,13 @@
 import csv
 import json
+from pathlib import Path
 
 import flask
 import flask_cors as fc
 
 import query
+
+PERSIST = True
 
 data = {}
 name = {}
@@ -27,6 +30,16 @@ def hello() -> str:
 
 single_stock_cache = {}
 suggestions_cache = {}
+if PERSIST:
+	single_stock_persist_path = Path('single_stock_persist.json')
+	if single_stock_persist_path.is_file():
+		with open(single_stock_persist_path, 'r') as single_stock_persist_file:
+			single_stock_cache = json.load(single_stock_persist_file)
+	suggestions_persist_path = Path('suggestions_persist.json')
+	if suggestions_persist_path.is_file():
+		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
+			suggestions_cache = json.load(suggestions_persist_file)
+
 
 @app.route("/api/stock/<stock_symbol>", methods=['GET'])
 @fc.cross_origin()
@@ -44,6 +57,9 @@ def get_single_stock(stock_symbol: str) -> str:
 		'issues': issues
 	}
 	single_stock_cache[stock_symbol] = result
+	if PERSIST:
+		with open(single_stock_persist_path, 'w') as single_stock_persist_file:
+			json.dump(single_stock_cache, single_stock_persist_file)
 	return flask.jsonify(result)
 
 @app.route("/api/suggestions/<stock_symbol>+<original_score>", methods=['GET'])
@@ -65,4 +81,7 @@ def get_suggestions(original_score: str, stock_symbol: str) -> str:
 			suggestions.append({'name': candidate_name, 'symbol': candidate, 'score': candidate_score})
 	suggestions.sort(key=lambda d: -1 * d['score'])
 	suggestions_cache[stock_symbol] = (original_score, suggestions)
+	if PERSIST:
+		with open(suggestions_persist_path, 'w') as suggestions_persist_file:
+			json.dump(suggestions_cache, suggestions_persist_file)
 	return flask.jsonify(suggestions)
