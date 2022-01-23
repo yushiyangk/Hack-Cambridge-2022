@@ -19,6 +19,7 @@ name_cache = {}
 score_cache = {}
 issues_cache = {}
 suggestions_cache = {}
+profit_cache = {}
 industries_cache = None
 preferences_list = [
 	{'id': 0, 'name': 'More Sustainable', 'alpha': 0.8},
@@ -38,6 +39,10 @@ if PERSIST:
 	if issues_persist_path.is_file():
 		with open(issues_persist_path, 'r') as issues_persist_file:
 			issues_cache = json.load(issues_persist_file)
+	profit_persist_path = Path('profit_persist.json')
+	if profit_persist_path.is_file():
+		with open(profit_persist_path, 'r') as profit_persist_path:
+			profit_cache = json.load(profit_persist_path)
 	suggestions_persist_path = Path('suggestions_full_persist.json')
 	if suggestions_persist_path.is_file():
 		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
@@ -118,10 +123,10 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				name_cache[stock_symbol] = name
 
 			if stock_symbol in score_cache:
-				score = score_cache[stock_symbol]
+				esg = score_cache[stock_symbol]
 			else:
-				score = query.get_csrhub_score(name)
-				score_cache[stock_symbol] = score
+				esg = query.get_csrhub_score(name)
+				score_cache[stock_symbol] = esg
 
 			if stock_symbol in issues_cache:
 				issues = issues_cache[stock_symbol]
@@ -129,8 +134,12 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				issues = query.get_csrhub_issues(name)
 				issues_cache[stock_symbol] = issues
 
-			profit = query.get_PE_ratio(stock_symbol)
-			esg = query.get_csrhub_score(query.name_to_csrname(name))
+			if stock_symbol in profit_cache:
+				profit = profit_cache[stock_symbol]
+			else:
+				profit = query.get_PE_ratio(stock_symbol)
+				profit_cache[stock_symbol] = profit
+
 			score = esg * alpha + profit * (1 - alpha)
 			scores.append({
 				'industry name': industry['name'],
@@ -140,6 +149,16 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				'issues': issues})
 
 		suggestions_list = sorted(scores, key=lambda d: d['score'])
+
+	if PERSIST:
+		with open(name_persist_path, 'w') as name_persist_file:
+			json.dump(name_cache, name_persist_file)
+		with open(score_persist_path, 'w') as score_persist_file:
+			json.dump(score_cache, score_persist_file)
+		with open(issues_persist_path, 'w') as issues_persist_file:
+			json.dump(issues_cache, issues_persist_file)
+		with open(profit_persist_path, 'w') as profit_persist_file:
+			json.dump(profit_cache, profit_persist_file)
 
 	return flask.jsonify(suggestions_list)
 
