@@ -39,6 +39,10 @@ if PERSIST:
 	if issues_persist_path.is_file():
 		with open(issues_persist_path, 'r') as issues_persist_file:
 			issues_cache = json.load(issues_persist_file)
+	profit_persist_path = Path('profit_persist.json')
+	if profit_persist_path.is_file():
+		with open(profit_persist_path, 'r') as profit_persist_path:
+			profit_cache = json.load(profit_persist_path)
 	suggestions_persist_path = Path('suggestions_full_persist.json')
 	if suggestions_persist_path.is_file():
 		with open(suggestions_persist_path, 'r') as suggestions_persist_file:
@@ -141,6 +145,16 @@ def get_suggestions_by_industries(industry_id:str, preference_id:str) -> str:
 				'issues': issues})
 
 		suggestions_list = sorted(scores, key=lambda d: d['score'])
+
+	if PERSIST:
+		with open(name_persist_path, 'w') as name_persist_file:
+			json.dump(name_cache, name_persist_file)
+		with open(score_persist_path, 'w') as score_persist_file:
+			json.dump(score_cache, score_persist_file)
+		with open(issues_persist_path, 'w') as issues_persist_file:
+			json.dump(issues_cache, issues_persist_file)
+		with open(profit_persist_path, 'w') as profit_persist_file:
+			json.dump(profit_cache, profit_persist_file)
 
 	return flask.jsonify(suggestions_list)
 
