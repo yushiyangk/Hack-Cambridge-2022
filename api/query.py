@@ -90,7 +90,8 @@ def get_PE_ratio(symbol):
 
 def get_industries_and_ranking():
     '''
-    Scrapes https://www.investors.com/news/esg-companies-best-esg-stocks-industries/ for list of industries and rankings
+    Scrapes https://www.investors.com/news/esg-companies-best-esg-stocks-industries/ 
+    for list of industries and rankings
     Returns dictionary with keys as industries and top 3 companies per industry
     Output:
         {"Industry": [(1st name, 1st symbol), (2nd name, 2nd symbol), (3rd name, 3rd symbol)], ...}
